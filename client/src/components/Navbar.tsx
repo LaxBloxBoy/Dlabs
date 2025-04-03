@@ -12,7 +12,12 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { ChevronDown, User, LogIn, LogOut, Search } from "lucide-react";
+import { 
+  ChevronDown, User, LogIn, LogOut, Search, Landmark, Award, 
+  Code, Database, PenTool, BookOpen, Video, FileText, Building2, 
+  Users, MessageSquare, Mail as MailIcon, GraduationCap, 
+  BookOpenCheck, GanttChartSquare
+} from "lucide-react";
 import { Category } from "@shared/schema";
 import ProfileDropdown from "./ProfileDropdown";
 
@@ -112,22 +117,31 @@ const Navbar = () => {
                           <h3 className="text-lg font-medium text-slate-900 mb-3">Popular Courses</h3>
                           <ul className="space-y-2">
                             <li>
-                              <Link href="/courses/1" className="text-slate-600 hover:text-emerald-600">
+                              <Link href="/courses/1" className="flex items-center text-slate-600 hover:text-emerald-600">
+                                <div className="w-8 h-8 bg-emerald-100 rounded-md flex items-center justify-center mr-2">
+                                  <Code className="h-4 w-4 text-emerald-600" />
+                                </div>
                                 Web Development Bootcamp
                               </Link>
                             </li>
                             <li>
-                              <Link href="/courses/2" className="text-slate-600 hover:text-emerald-600">
+                              <Link href="/courses/2" className="flex items-center text-slate-600 hover:text-emerald-600">
+                                <div className="w-8 h-8 bg-emerald-100 rounded-md flex items-center justify-center mr-2">
+                                  <Database className="h-4 w-4 text-emerald-600" />
+                                </div>
                                 Data Science Fundamentals
                               </Link>
                             </li>
                             <li>
-                              <Link href="/courses/3" className="text-slate-600 hover:text-emerald-600">
+                              <Link href="/courses/3" className="flex items-center text-slate-600 hover:text-emerald-600">
+                                <div className="w-8 h-8 bg-emerald-100 rounded-md flex items-center justify-center mr-2">
+                                  <PenTool className="h-4 w-4 text-emerald-600" />
+                                </div>
                                 UX/UI Design Essentials
                               </Link>
                             </li>
                             <li>
-                              <Link href="/courses" className="text-emerald-600 font-medium hover:underline">
+                              <Link href="/courses" className="text-emerald-600 font-medium hover:underline mt-2 inline-block">
                                 View All Courses →
                               </Link>
                             </li>
@@ -135,17 +149,25 @@ const Navbar = () => {
                         </div>
                         <div>
                           <h3 className="text-lg font-medium text-slate-900 mb-3">Categories</h3>
-                          <div className="grid grid-cols-1 gap-2">
+                          <div className="grid grid-cols-2 gap-2">
                             {(categories || []).slice(0, 4).map((category: Category) => (
                               <Link 
                                 key={category.id} 
                                 href={`/category/${category.id}`}
-                                className="text-slate-600 hover:text-emerald-600"
+                                className="flex items-center text-slate-600 hover:text-emerald-600"
                               >
+                                <div className="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mr-2">
+                                  <div className="h-3 w-3 text-emerald-600">
+                                    {category.icon === 'code' ? <Code className="h-3 w-3" /> : 
+                                     category.icon === 'database' ? <Database className="h-3 w-3" /> :
+                                     category.icon === 'design' ? <PenTool className="h-3 w-3" /> :
+                                     <BookOpen className="h-3 w-3" />}
+                                  </div>
+                                </div>
                                 {category.name}
                               </Link>
                             ))}
-                            <Link href="/#categories" className="text-emerald-600 font-medium hover:underline">
+                            <Link href="/#categories" className="text-emerald-600 font-medium hover:underline col-span-2 mt-2 inline-block">
                               View All Categories →
                             </Link>
                           </div>
@@ -156,6 +178,58 @@ const Navbar = () => {
                 </NavigationMenuList>
               </NavigationMenu>
 
+              <NavigationMenu className="z-50">
+                <NavigationMenuList>
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger
+                      className={`border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-800 
+                        px-0 font-medium bg-transparent hover:bg-transparent focus:bg-transparent`}
+                    >
+                      Resources
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent className="mega-menu-container">
+                      <div className="w-[400px] p-6">
+                        <h3 className="text-lg font-medium text-slate-900 mb-3">Learning Resources</h3>
+                        <ul className="space-y-3">
+                          <li>
+                            <Link href="/resources/guides" className="flex items-center text-slate-600 hover:text-emerald-600">
+                              <div className="w-8 h-8 bg-emerald-100 rounded-md flex items-center justify-center mr-2">
+                                <BookOpenCheck className="h-4 w-4 text-emerald-600" />
+                              </div>
+                              Learning Guides
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/resources/webinars" className="flex items-center text-slate-600 hover:text-emerald-600">
+                              <div className="w-8 h-8 bg-emerald-100 rounded-md flex items-center justify-center mr-2">
+                                <Video className="h-4 w-4 text-emerald-600" />
+                              </div>
+                              Free Webinars
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/resources/blog" className="flex items-center text-slate-600 hover:text-emerald-600">
+                              <div className="w-8 h-8 bg-emerald-100 rounded-md flex items-center justify-center mr-2">
+                                <FileText className="h-4 w-4 text-emerald-600" />
+                              </div>
+                              Industry Blog
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/resources/certification" className="flex items-center text-slate-600 hover:text-emerald-600">
+                              <div className="w-8 h-8 bg-emerald-100 rounded-md flex items-center justify-center mr-2">
+                                <Award className="h-4 w-4 text-emerald-600" />
+                              </div>
+                              Certification Paths
+                            </Link>
+                          </li>
+                        </ul>
+                      </div>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
+              
               <Link 
                 href="/courses" 
                 className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
@@ -167,18 +241,57 @@ const Navbar = () => {
                 All Courses
               </Link>
               
-              <Link 
-                href="/#about" 
-                className="border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-800 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                onClick={(e) => {
-                  if (location === "/") {
-                    e.preventDefault();
-                    document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
-                  }
-                }}
-              >
-                About
-              </Link>
+              <NavigationMenu className="z-50">
+                <NavigationMenuList>
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger
+                      className={`border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-800 
+                        px-0 font-medium bg-transparent hover:bg-transparent focus:bg-transparent`}
+                    >
+                      About
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent className="mega-menu-container">
+                      <div className="w-[400px] p-6">
+                        <h3 className="text-lg font-medium text-slate-900 mb-3">About D-Code Labs</h3>
+                        <ul className="space-y-3">
+                          <li>
+                            <Link href="/about/company" className="flex items-center text-slate-600 hover:text-emerald-600">
+                              <div className="w-8 h-8 bg-emerald-100 rounded-md flex items-center justify-center mr-2">
+                                <Building2 className="h-4 w-4 text-emerald-600" />
+                              </div>
+                              Our Company
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/about/instructors" className="flex items-center text-slate-600 hover:text-emerald-600">
+                              <div className="w-8 h-8 bg-emerald-100 rounded-md flex items-center justify-center mr-2">
+                                <Users className="h-4 w-4 text-emerald-600" />
+                              </div>
+                              Meet Our Instructors
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/about/testimonials" className="flex items-center text-slate-600 hover:text-emerald-600">
+                              <div className="w-8 h-8 bg-emerald-100 rounded-md flex items-center justify-center mr-2">
+                                <MessageSquare className="h-4 w-4 text-emerald-600" />
+                              </div>
+                              Student Testimonials
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/contact" className="flex items-center text-slate-600 hover:text-emerald-600">
+                              <div className="w-8 h-8 bg-emerald-100 rounded-md flex items-center justify-center mr-2">
+                                <MailIcon className="h-4 w-4 text-emerald-600" />
+                              </div>
+                              Contact Us
+                            </Link>
+                          </li>
+                        </ul>
+                      </div>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
             </div>
           </div>
 
@@ -230,7 +343,11 @@ const Navbar = () => {
               aria-expanded={isMenuOpen}
             >
               <span className="sr-only">Open main menu</span>
-              <i className="fas fa-bars"></i>
+              {isMenuOpen ? (
+                <ChevronDown className="h-5 w-5" />
+              ) : (
+                <GanttChartSquare className="h-5 w-5" />
+              )}
             </button>
           </div>
         </div>
@@ -275,6 +392,15 @@ const Navbar = () => {
           >
             Courses
           </Link>
+          
+          <Link 
+            href="/resources/guides" 
+            className="border-transparent text-slate-600 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+            onClick={closeMenu}
+          >
+            Resources
+          </Link>
+
           {/* Remove duplicate Courses link in mobile menu */}
           <Link 
             href="/#categories" 

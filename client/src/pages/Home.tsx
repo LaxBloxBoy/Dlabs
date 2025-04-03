@@ -139,32 +139,82 @@ const Home = () => {
   const renderCategoryIcon = (iconName: string) => {
     switch(iconName.toLowerCase()) {
       case 'code':
-        return <Code className="h-6 w-6 text-emerald-600" />;
+        return (
+          <div className="relative">
+            <div className="absolute inset-0 bg-emerald-200 rounded-md rotate-45 transform -translate-x-1 translate-y-1 opacity-50"></div>
+            <Code className="h-7 w-7 text-emerald-700 relative z-10" strokeWidth={1.5} />
+          </div>
+        );
       case 'database':
-        return <Database className="h-6 w-6 text-emerald-600" />;
+        return (
+          <div className="relative">
+            <div className="absolute inset-0 bg-emerald-200 rounded-md rotate-45 transform -translate-x-1 translate-y-1 opacity-50"></div>
+            <Database className="h-7 w-7 text-emerald-700 relative z-10" strokeWidth={1.5} />
+          </div>
+        );
       case 'pen-tool':
       case 'design':
-        return <PenTool className="h-6 w-6 text-emerald-600" />;
+        return (
+          <div className="relative">
+            <div className="absolute inset-0 bg-emerald-200 rounded-md rotate-45 transform -translate-x-1 translate-y-1 opacity-50"></div>
+            <PenTool className="h-7 w-7 text-emerald-700 relative z-10" strokeWidth={1.5} />
+          </div>
+        );
       case 'briefcase':
       case 'business':
-        return <BriefcaseBusiness className="h-6 w-6 text-emerald-600" />;
+        return (
+          <div className="relative">
+            <div className="absolute inset-0 bg-emerald-200 rounded-md rotate-45 transform -translate-x-1 translate-y-1 opacity-50"></div>
+            <BriefcaseBusiness className="h-7 w-7 text-emerald-700 relative z-10" strokeWidth={1.5} />
+          </div>
+        );
       case 'smartphone':
       case 'mobile':
-        return <Smartphone className="h-6 w-6 text-emerald-600" />;
+        return (
+          <div className="relative">
+            <div className="absolute inset-0 bg-emerald-200 rounded-md rotate-45 transform -translate-x-1 translate-y-1 opacity-50"></div>
+            <Smartphone className="h-7 w-7 text-emerald-700 relative z-10" strokeWidth={1.5} />
+          </div>
+        );
       case 'globe':
       case 'web':
-        return <Globe className="h-6 w-6 text-emerald-600" />;
+        return (
+          <div className="relative">
+            <div className="absolute inset-0 bg-emerald-200 rounded-md rotate-45 transform -translate-x-1 translate-y-1 opacity-50"></div>
+            <Globe className="h-7 w-7 text-emerald-700 relative z-10" strokeWidth={1.5} />
+          </div>
+        );
       case 'gamepad':
       case 'game':
-        return <Gamepad2 className="h-6 w-6 text-emerald-600" />;
+        return (
+          <div className="relative">
+            <div className="absolute inset-0 bg-emerald-200 rounded-md rotate-45 transform -translate-x-1 translate-y-1 opacity-50"></div>
+            <Gamepad2 className="h-7 w-7 text-emerald-700 relative z-10" strokeWidth={1.5} />
+          </div>
+        );
       case 'chart':
       case 'data':
-        return <BarChart2 className="h-6 w-6 text-emerald-600" />;
+        return (
+          <div className="relative">
+            <div className="absolute inset-0 bg-emerald-200 rounded-md rotate-45 transform -translate-x-1 translate-y-1 opacity-50"></div>
+            <BarChart2 className="h-7 w-7 text-emerald-700 relative z-10" strokeWidth={1.5} />
+          </div>
+        );
       case 'certificate':
       case 'badge':
-        return <FileBadge className="h-6 w-6 text-emerald-600" />;
+        return (
+          <div className="relative">
+            <div className="absolute inset-0 bg-emerald-200 rounded-md rotate-45 transform -translate-x-1 translate-y-1 opacity-50"></div>
+            <Award className="h-7 w-7 text-emerald-700 relative z-10" strokeWidth={1.5} />
+          </div>
+        );
       default:
-        return <BookOpen className="h-6 w-6 text-emerald-600" />;
+        return (
+          <div className="relative">
+            <div className="absolute inset-0 bg-emerald-200 rounded-md rotate-45 transform -translate-x-1 translate-y-1 opacity-50"></div>
+            <BookOpen className="h-7 w-7 text-emerald-700 relative z-10" strokeWidth={1.5} />
+          </div>
+        );
     }
   };
 
