@@ -9,11 +9,13 @@ import WaitlistCTA from "@/components/WaitlistCTA";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { FaGoogle, FaAmazon, FaMicrosoft, FaApple, FaSlack } from "react-icons/fa";
+import { SiTesla, SiSamsung, SiOracle, SiLinkedin, SiIntel } from "react-icons/si";
 import { 
   ArrowDown, 
   Sparkles, 
@@ -41,7 +43,6 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { motion } from "framer-motion";
-import { useMutation } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 
 // Define types for our data
@@ -458,6 +459,26 @@ const Home = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trusted by Companies */}
+      <section className="py-12 bg-white border-t border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h3 className="text-center text-sm font-semibold text-slate-500 mb-8 uppercase tracking-wide">
+            Trusted by leading companies worldwide
+          </h3>
+          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-9 gap-8 items-center justify-items-center">
+            <FaGoogle className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
+            <FaAmazon className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
+            <FaMicrosoft className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
+            <FaApple className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
+            <SiTesla className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
+            <SiSamsung className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
+            <SiOracle className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
+            <SiLinkedin className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
+            <SiIntel className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
           </div>
         </div>
       </section>
