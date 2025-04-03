@@ -219,12 +219,17 @@ const Home = () => {
                   {[...Array(5)].map((_, i) => (
                     <div 
                       key={i} 
-                      className="inline-block h-8 w-8 rounded-full ring-2 ring-emerald-900" 
+                      className="inline-block h-8 w-8 rounded-full ring-2 ring-emerald-900 overflow-hidden" 
                       style={{
-                        backgroundColor: `hsl(${160 + i * 10}, 70%, ${50 + i * 5}%)`,
                         zIndex: 5 - i
                       }}
-                    />
+                    >
+                      <img 
+                        src={`https://randomuser.me/api/portraits/${i % 2 === 0 ? 'women' : 'men'}/${i + 1}.jpg`}
+                        alt="User"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
                   ))}
                 </div>
                 <div>
@@ -649,7 +654,7 @@ const Home = () => {
                         </div>
                         <Button 
                           onClick={() => setLocation(`/courses/${course.id}`)}
-                          className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                          className="bg-emerald-600 hover:bg-emerald-700 text-white"
                         >
                           View Course
                         </Button>
@@ -664,7 +669,7 @@ const Home = () => {
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="border-indigo-200 text-indigo-600 hover:bg-indigo-50"
+                className="border-emerald-200 text-emerald-600 hover:bg-emerald-50"
                 onClick={() => setLocation("/courses")}
               >
                 View All Courses
