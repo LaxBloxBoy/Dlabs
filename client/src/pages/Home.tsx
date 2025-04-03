@@ -208,7 +208,7 @@ const Home = () => {
                 <Button 
                   size="lg" 
                   variant="outline" 
-                  className="border-white/30 text-white hover:bg-white/10 px-8 rounded-full"
+                  className="border-white/30 bg-white text-emerald-800 hover:bg-emerald-50 px-8 rounded-full"
                   onClick={scrollToStats}
                 >
                   Learn More
