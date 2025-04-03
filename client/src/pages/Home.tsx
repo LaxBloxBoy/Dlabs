@@ -329,6 +329,26 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Trusted by Companies */}
+      <section className="py-10 bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h3 className="text-center text-sm font-semibold text-slate-500 mb-8 uppercase tracking-wide">
+            Trusted by leading companies worldwide
+          </h3>
+          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-9 gap-8 items-center justify-items-center">
+            <FaGoogle className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
+            <FaAmazon className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
+            <FaMicrosoft className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
+            <FaApple className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
+            <SiTesla className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
+            <SiSamsung className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
+            <SiOracle className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
+            <SiLinkedin className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
+            <SiIntel className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
+          </div>
+        </div>
+      </section>
+
       {/* Stats Section */}
       <section ref={statsRef} className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -459,26 +479,6 @@ const Home = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Trusted by Companies */}
-      <section className="py-12 bg-white border-t border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h3 className="text-center text-sm font-semibold text-slate-500 mb-8 uppercase tracking-wide">
-            Trusted by leading companies worldwide
-          </h3>
-          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-9 gap-8 items-center justify-items-center">
-            <FaGoogle className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
-            <FaAmazon className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
-            <FaMicrosoft className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
-            <FaApple className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
-            <SiTesla className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
-            <SiSamsung className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
-            <SiOracle className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
-            <SiLinkedin className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
-            <SiIntel className="h-8 w-8 text-slate-400 hover:text-emerald-600 transition-colors" />
           </div>
         </div>
       </section>

@@ -182,37 +182,45 @@ const Navbar = () => {
             </div>
           </div>
 
-          <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
-            {/* Search Bar */}
-            <form onSubmit={handleSearch} className="relative">
-              <Input
-                type="search"
-                placeholder="Search courses..."
-                className="w-44 md:w-56 pl-9 h-9 rounded-full bg-slate-50 border-slate-200 focus:border-emerald-500"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
-            </form>
+          <div className="hidden sm:flex sm:items-center">
+            {/* Search Bar - separate from profile dropdown */}
+            <div className="mr-8">
+              <form onSubmit={handleSearch} className="relative">
+                <Input
+                  type="search"
+                  placeholder="Search courses..."
+                  className="w-44 md:w-64 pl-9 h-9 rounded-full bg-slate-50 border-slate-200 focus:border-emerald-500"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <button type="submit" className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-emerald-600 hover:text-emerald-700">
+                  Search
+                </button>
+              </form>
+            </div>
             
-            {user ? (
-              <ProfileDropdown />
-            ) : (
-              <>
-                <Link href="/login">
-                  <Button variant="outline" size="sm" className="flex items-center border-emerald-600 text-emerald-600 hover:bg-emerald-50">
-                    <LogIn className="mr-2 h-4 w-4" />
-                    Login
-                  </Button>
-                </Link>
-                <Link href="/signup">
-                  <Button variant="default" size="sm" className="flex items-center bg-emerald-600 hover:bg-emerald-700">
-                    <User className="mr-2 h-4 w-4" />
-                    Sign Up
-                  </Button>
-                </Link>
-              </>
-            )}
+            {/* Auth buttons in separate div */}
+            <div className="flex items-center space-x-4">
+              {user ? (
+                <ProfileDropdown />
+              ) : (
+                <>
+                  <Link href="/login">
+                    <Button variant="outline" size="sm" className="flex items-center border-emerald-600 text-emerald-600 hover:bg-emerald-50">
+                      <LogIn className="mr-2 h-4 w-4" />
+                      Login
+                    </Button>
+                  </Link>
+                  <Link href="/signup">
+                    <Button variant="default" size="sm" className="flex items-center bg-emerald-600 hover:bg-emerald-700">
+                      <User className="mr-2 h-4 w-4" />
+                      Sign Up
+                    </Button>
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
           <div className="-mr-2 flex items-center sm:hidden">
             <button 
