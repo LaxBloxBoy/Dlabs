@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="text-white font-serif font-bold text-2xl">
-              LearnHub
+              D-Code Labs
             </Link>
             <p className="mt-2 text-sm text-slate-400">
               Empowering careers through expert-led online education and cutting-edge learning technology.
@@ -105,7 +105,7 @@ const Footer = () => {
         </div>
         <div className="mt-12 border-t border-slate-700 pt-8">
           <p className="text-base text-slate-400 text-center">
-            &copy; {new Date().getFullYear()} LearnHub, Inc. All rights reserved.
+            &copy; {new Date().getFullYear()} D-Code Labs, Inc. All rights reserved.
           </p>
         </div>
       </div>
