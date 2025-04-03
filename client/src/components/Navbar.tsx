@@ -88,10 +88,10 @@ const Navbar = () => {
                 D-Code Labs
               </Link>
             </div>
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+            <div className="hidden lg:ml-6 lg:flex lg:space-x-4">
               <Link 
                 href="/" 
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                className={`inline-flex items-center px-2 pt-1 border-b-2 text-sm font-medium whitespace-nowrap ${
                   isActive("/") 
                     ? "border-emerald-600 text-emerald-600" 
                     : "border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-800"
@@ -107,7 +107,7 @@ const Navbar = () => {
                     <NavigationMenuTrigger
                       className={`border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-800 
                         ${isActive("/courses") ? "border-emerald-600 text-emerald-600" : ""}
-                        px-0 font-medium bg-transparent hover:bg-transparent focus:bg-transparent`}
+                        px-2 font-medium bg-transparent hover:bg-transparent focus:bg-transparent whitespace-nowrap min-w-[120px]`}
                     >
                       Courses
                     </NavigationMenuTrigger>
@@ -295,7 +295,7 @@ const Navbar = () => {
             </div>
           </div>
 
-          <div className="hidden sm:flex sm:items-center">
+          <div className="hidden lg:flex lg:items-center">
             {/* Search Bar - separate from profile dropdown */}
             <div className="mr-8">
               <form onSubmit={handleSearch} className="relative">
@@ -335,7 +335,7 @@ const Navbar = () => {
               )}
             </div>
           </div>
-          <div className="-mr-2 flex items-center sm:hidden">
+          <div className="-mr-2 flex items-center lg:hidden">
             <button 
               type="button" 
               className="inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-slate-500 hover:bg-slate-100 focus:outline-none"
@@ -354,7 +354,7 @@ const Navbar = () => {
       </div>
 
       {/* Mobile menu */}
-      <div className={`sm:hidden ${isMenuOpen ? "" : "hidden"}`}>
+      <div className={`lg:hidden ${isMenuOpen ? "" : "hidden"}`}>
         <div className="pt-2 pb-3 space-y-1">
           {/* Mobile Search */}
           <form onSubmit={handleSearch} className="px-3 py-2">
