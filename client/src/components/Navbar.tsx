@@ -3,23 +3,24 @@ import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { 
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { ChevronDown, User, LogIn, LogOut } from "lucide-react";
+import { ChevronDown, User, LogIn, LogOut, Search } from "lucide-react";
 import { Category } from "@shared/schema";
 import ProfileDropdown from "./ProfileDropdown";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
-  const [location] = useLocation();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [location, setLocation] = useLocation();
   const { user, logoutMutation } = useAuth();
 
   // Fetch categories for the mega menu
@@ -37,6 +38,13 @@ const Navbar = () => {
 
   const isActive = (path: string) => {
     return location === path;
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      setLocation(`/courses?search=${encodeURIComponent(searchQuery.trim())}`);
+    }
   };
 
   // Close mega menu when clicking outside
@@ -71,7 +79,7 @@ const Navbar = () => {
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="text-primary font-serif font-bold text-2xl">
+              <Link href="/" className="text-emerald-600 font-serif font-bold text-2xl">
                 D-Code Labs
               </Link>
             </div>
@@ -80,7 +88,7 @@ const Navbar = () => {
                 href="/" 
                 className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
                   isActive("/") 
-                    ? "border-primary text-primary" 
+                    ? "border-emerald-600 text-emerald-600" 
                     : "border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-800"
                 }`}
               >
@@ -93,7 +101,7 @@ const Navbar = () => {
                   <NavigationMenuItem>
                     <NavigationMenuTrigger
                       className={`border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-800 
-                        ${isActive("/courses") ? "border-primary text-primary" : ""}
+                        ${isActive("/courses") ? "border-emerald-600 text-emerald-600" : ""}
                         px-0 font-medium bg-transparent hover:bg-transparent focus:bg-transparent`}
                     >
                       Courses
@@ -104,22 +112,22 @@ const Navbar = () => {
                           <h3 className="text-lg font-medium text-slate-900 mb-3">Popular Courses</h3>
                           <ul className="space-y-2">
                             <li>
-                              <Link href="/courses/1" className="text-slate-600 hover:text-primary">
+                              <Link href="/courses/1" className="text-slate-600 hover:text-emerald-600">
                                 Web Development Bootcamp
                               </Link>
                             </li>
                             <li>
-                              <Link href="/courses/2" className="text-slate-600 hover:text-primary">
+                              <Link href="/courses/2" className="text-slate-600 hover:text-emerald-600">
                                 Data Science Fundamentals
                               </Link>
                             </li>
                             <li>
-                              <Link href="/courses/3" className="text-slate-600 hover:text-primary">
+                              <Link href="/courses/3" className="text-slate-600 hover:text-emerald-600">
                                 UX/UI Design Essentials
                               </Link>
                             </li>
                             <li>
-                              <Link href="/courses" className="text-primary font-medium hover:underline">
+                              <Link href="/courses" className="text-emerald-600 font-medium hover:underline">
                                 View All Courses →
                               </Link>
                             </li>
@@ -132,12 +140,12 @@ const Navbar = () => {
                               <Link 
                                 key={category.id} 
                                 href={`/category/${category.id}`}
-                                className="text-slate-600 hover:text-primary"
+                                className="text-slate-600 hover:text-emerald-600"
                               >
                                 {category.name}
                               </Link>
                             ))}
-                            <Link href="/#categories" className="text-primary font-medium hover:underline">
+                            <Link href="/#categories" className="text-emerald-600 font-medium hover:underline">
                               View All Categories →
                             </Link>
                           </div>
@@ -152,7 +160,7 @@ const Navbar = () => {
                 href="/courses" 
                 className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
                   isActive("/courses") 
-                    ? "border-primary text-primary" 
+                    ? "border-emerald-600 text-emerald-600" 
                     : "border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-800"
                 }`}
               >
@@ -173,19 +181,32 @@ const Navbar = () => {
               </Link>
             </div>
           </div>
-          <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-3">
+
+          <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
+            {/* Search Bar */}
+            <form onSubmit={handleSearch} className="relative">
+              <Input
+                type="search"
+                placeholder="Search courses..."
+                className="w-44 md:w-56 pl-9 h-9 rounded-full bg-slate-50 border-slate-200 focus:border-emerald-500"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+            </form>
+            
             {user ? (
               <ProfileDropdown />
             ) : (
               <>
                 <Link href="/login">
-                  <Button variant="outline" size="sm" className="flex items-center">
+                  <Button variant="outline" size="sm" className="flex items-center border-emerald-600 text-emerald-600 hover:bg-emerald-50">
                     <LogIn className="mr-2 h-4 w-4" />
                     Login
                   </Button>
                 </Link>
                 <Link href="/signup">
-                  <Button variant="default" size="sm" className="flex items-center">
+                  <Button variant="default" size="sm" className="flex items-center bg-emerald-600 hover:bg-emerald-700">
                     <User className="mr-2 h-4 w-4" />
                     Sign Up
                   </Button>
@@ -210,11 +231,25 @@ const Navbar = () => {
       {/* Mobile menu */}
       <div className={`sm:hidden ${isMenuOpen ? "" : "hidden"}`}>
         <div className="pt-2 pb-3 space-y-1">
+          {/* Mobile Search */}
+          <form onSubmit={handleSearch} className="px-3 py-2">
+            <div className="relative">
+              <Input
+                type="search"
+                placeholder="Search courses..."
+                className="w-full pl-9 rounded-full bg-slate-50 border-slate-200 focus:border-emerald-500"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+            </div>
+          </form>
+
           <Link 
             href="/" 
             className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
               isActive("/") 
-                ? "bg-slate-50 border-primary text-primary" 
+                ? "bg-slate-50 border-emerald-600 text-emerald-600" 
                 : "border-transparent text-slate-600 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-800"
             }`}
             onClick={closeMenu}
@@ -225,7 +260,7 @@ const Navbar = () => {
             href="/courses" 
             className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
               isActive("/courses") 
-                ? "bg-slate-50 border-primary text-primary" 
+                ? "bg-slate-50 border-emerald-600 text-emerald-600" 
                 : "border-transparent text-slate-600 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-800"
             }`}
             onClick={closeMenu}
@@ -262,14 +297,14 @@ const Navbar = () => {
           {user ? (
             <div className="mt-4 px-4 space-y-2">
               <Link href="/profile" onClick={closeMenu}>
-                <Button variant="outline" className="w-full flex items-center justify-center">
+                <Button variant="outline" className="w-full flex items-center justify-center border-emerald-600 text-emerald-600 hover:bg-emerald-50">
                   <User className="mr-2 h-4 w-4" />
                   My Profile
                 </Button>
               </Link>
               <Button 
                 variant="default" 
-                className="w-full flex items-center justify-center"
+                className="w-full flex items-center justify-center bg-emerald-600 hover:bg-emerald-700"
                 onClick={() => {
                   closeMenu();
                   logoutMutation.mutate();
@@ -283,13 +318,13 @@ const Navbar = () => {
           ) : (
             <div className="mt-4 px-4 space-y-2">
               <Link href="/login" onClick={closeMenu}>
-                <Button variant="outline" className="w-full flex items-center justify-center">
+                <Button variant="outline" className="w-full flex items-center justify-center border-emerald-600 text-emerald-600 hover:bg-emerald-50">
                   <LogIn className="mr-2 h-4 w-4" />
                   Login
                 </Button>
               </Link>
               <Link href="/signup" onClick={closeMenu}>
-                <Button variant="default" className="w-full flex items-center justify-center">
+                <Button variant="default" className="w-full flex items-center justify-center bg-emerald-600 hover:bg-emerald-700">
                   <User className="mr-2 h-4 w-4" />
                   Sign Up
                 </Button>

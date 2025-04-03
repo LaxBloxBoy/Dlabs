@@ -65,25 +65,33 @@ const ProfileDropdown = () => {
           <Link href="/profile">
             <DropdownMenuItem>
               <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
+              <span>Dashboard</span>
             </DropdownMenuItem>
           </Link>
-          <DropdownMenuItem>
-            <BookOpen className="mr-2 h-4 w-4" />
-            <span>My Courses</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <CreditCard className="mr-2 h-4 w-4" />
-            <span>Billing</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Bell className="mr-2 h-4 w-4" />
-            <span>Notifications</span>
-          </DropdownMenuItem>
+          <Link href="/profile/courses">
+            <DropdownMenuItem>
+              <BookOpen className="mr-2 h-4 w-4" />
+              <span>My Courses</span>
+            </DropdownMenuItem>
+          </Link>
+          <Link href="/profile/billing">
+            <DropdownMenuItem>
+              <CreditCard className="mr-2 h-4 w-4" />
+              <span>Billing</span>
+            </DropdownMenuItem>
+          </Link>
+          <Link href="/profile/settings">
+            <DropdownMenuItem>
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Settings</span>
+            </DropdownMenuItem>
+          </Link>
+          <Link href="/profile/notifications">
+            <DropdownMenuItem>
+              <Bell className="mr-2 h-4 w-4" />
+              <span>Notifications</span>
+            </DropdownMenuItem>
+          </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout} disabled={logoutMutation.isPending}>

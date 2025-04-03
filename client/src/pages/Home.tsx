@@ -23,7 +23,16 @@ import {
   GraduationCap,
   Layers,
   MessagesSquare,
-  Check
+  Check,
+  Code,
+  Database,
+  PenTool,
+  BriefcaseBusiness,
+  Smartphone,
+  Globe,
+  Gamepad2,
+  BarChart2,
+  FileBadge
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -123,6 +132,39 @@ const Home = () => {
   // Animation trigger for smooth scroll
   const scrollToStats = () => {
     statsRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+  
+  // Function to render proper icons based on category name/icon
+  const renderCategoryIcon = (iconName: string) => {
+    switch(iconName.toLowerCase()) {
+      case 'code':
+        return <Code className="h-6 w-6 text-emerald-600" />;
+      case 'database':
+        return <Database className="h-6 w-6 text-emerald-600" />;
+      case 'pen-tool':
+      case 'design':
+        return <PenTool className="h-6 w-6 text-emerald-600" />;
+      case 'briefcase':
+      case 'business':
+        return <BriefcaseBusiness className="h-6 w-6 text-emerald-600" />;
+      case 'smartphone':
+      case 'mobile':
+        return <Smartphone className="h-6 w-6 text-emerald-600" />;
+      case 'globe':
+      case 'web':
+        return <Globe className="h-6 w-6 text-emerald-600" />;
+      case 'gamepad':
+      case 'game':
+        return <Gamepad2 className="h-6 w-6 text-emerald-600" />;
+      case 'chart':
+      case 'data':
+        return <BarChart2 className="h-6 w-6 text-emerald-600" />;
+      case 'certificate':
+      case 'badge':
+        return <FileBadge className="h-6 w-6 text-emerald-600" />;
+      default:
+        return <BookOpen className="h-6 w-6 text-emerald-600" />;
+    }
   };
 
   return (
@@ -634,17 +676,17 @@ const Home = () => {
                   whileHover={{ y: -5 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <div className="bg-white rounded-xl shadow-md overflow-hidden border border-slate-100 transition-all duration-300 hover:shadow-xl hover:border-indigo-100 group">
+                  <div className="bg-white rounded-xl shadow-md overflow-hidden border border-slate-100 transition-all duration-300 hover:shadow-xl hover:border-emerald-100 group">
                     <div className="p-8 text-center">
-                      <div className="w-16 h-16 rounded-2xl mx-auto bg-indigo-100 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300 mb-4">
-                        <span className="text-3xl">{category.icon}</span>
+                      <div className="w-16 h-16 rounded-2xl mx-auto bg-emerald-100 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300 mb-4">
+                        {renderCategoryIcon(category.icon)}
                       </div>
                       <h3 className="font-semibold text-lg text-slate-900 mb-2">{category.name}</h3>
                       <p className="text-slate-500 text-sm mb-4">{category.courseCount} courses</p>
                       <Button 
                         variant="outline" 
                         size="sm" 
-                        className="w-full border-slate-200 text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 hover:border-indigo-200"
+                        className="w-full border-slate-200 text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200"
                         onClick={() => setLocation(`/courses?category=${category.id}`)}
                       >
                         Browse Courses
@@ -661,7 +703,7 @@ const Home = () => {
       {/* Testimonials - Revamped */}
       <section className="py-24 bg-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px]"></div>
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:20px_20px]"></div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">
