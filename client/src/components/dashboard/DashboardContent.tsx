@@ -117,15 +117,12 @@ export function DashboardContent() {
   });
 
   const handleContinueCourse = (enrollmentId: number) => {
-    // In a real implementation, this would open the course content at the last position
-    // For now, we'll simulate progress by adding 10% to the current progress
-
     if (!enrollments) return;
     const enrollment = enrollments.find((e) => e.id === enrollmentId);
     if (!enrollment) return;
 
-    const newProgress = Math.min(enrollment.progress + 10, 100);
-    updateProgressMutation.mutate({ enrollmentId, progress: newProgress });
+    // Navigate to the course learning page
+    setLocation(`/courses/${enrollment.courseId}/learn`);
   };
 
   if (isLoadingStats || isLoadingEnrollments) {
