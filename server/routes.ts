@@ -154,22 +154,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
     try {
       const userId = req.user.id;
-      const enrollments = await storage.getUserEnrollments(userId);
-      
-      // Get course data for each enrollment
-      const enrollmentsWithCourses = await Promise.all(
-        enrollments.map(async (enrollment) => {
-          const course = await storage.getCourseById(enrollment.courseId);
-          return {
-            ...enrollment,
-            course
-          };
-        })
-      );
-      
-      res.json(enrollmentsWithCourses);
+      const enrollments = await storage.getDetailedUserEnrollments(userId);
+      res.json(enrollments);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch enrollments" });
+    }
+  });
+  
+  // Dashboard statistics
+  app.get(`${apiPrefix}/dashboard/stats`, async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    try {
+      const userId = req.user.id;
+      const stats = await storage.getUserDashboardStats(userId);
+      res.json(stats);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch dashboard statistics" });
     }
   });
 

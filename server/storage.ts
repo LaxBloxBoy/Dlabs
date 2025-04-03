@@ -62,6 +62,8 @@ export interface IStorage {
   enrollUserInCourse(enrollment: InsertEnrollment): Promise<Enrollment>;
   updateEnrollmentProgress(enrollmentId: number, progress: number): Promise<Enrollment>;
   isUserEnrolledInCourse(userId: number, courseId: number): Promise<boolean>;
+  getDetailedUserEnrollments(userId: number): Promise<any[]>;
+  getUserDashboardStats(userId: number): Promise<any>;
 
   // Waitlist methods
   addToWaitlist(entry: InsertWaitlist): Promise<Waitlist>;
@@ -200,6 +202,85 @@ export class PostgresStorage implements IStorage {
       ))
       .limit(1);
     return result.length > 0;
+  }
+  
+  async getDetailedUserEnrollments(userId: number): Promise<any[]> {
+    const userEnrollments = await db.select().from(enrollments).where(eq(enrollments.userId, userId));
+    
+    if (userEnrollments.length === 0) {
+      return [];
+    }
+    
+    const enrichedEnrollments = await Promise.all(userEnrollments.map(async (enrollment) => {
+      const course = await this.getCourseById(enrollment.courseId);
+      if (!course) return null;
+      
+      const instructor = await this.getInstructorById(course.instructorId);
+      const category = await this.getCategoryById(course.categoryId);
+      
+      return {
+        ...enrollment,
+        course: {
+          ...course,
+          instructor,
+          category
+        }
+      };
+    }));
+    
+    return enrichedEnrollments.filter(Boolean);
+  }
+  
+  async getUserDashboardStats(userId: number): Promise<any> {
+    const userEnrollments = await this.getUserEnrollments(userId);
+    
+    if (userEnrollments.length === 0) {
+      return {
+        enrolledCourses: 0,
+        completionRate: 0,
+        totalCoursesTime: 0,
+        averageProgress: 0,
+        activeCourses: 0,
+        completedCourses: 0
+      };
+    }
+    
+    // Calculate statistics
+    const totalEnrollments = userEnrollments.length;
+    const totalProgress = userEnrollments.reduce((sum, enrollment) => sum + enrollment.progress, 0);
+    const averageProgress = Math.round(totalProgress / totalEnrollments);
+    
+    const completedCourses = userEnrollments.filter(e => e.progress === 100).length;
+    const activeCourses = userEnrollments.filter(e => e.progress < 100 && e.progress > 0).length;
+    const notStartedCourses = userEnrollments.filter(e => e.progress === 0).length;
+    
+    // Get total course time
+    let totalCoursesTime = 0;
+    
+    for (const enrollment of userEnrollments) {
+      const course = await this.getCourseById(enrollment.courseId);
+      if (course) {
+        // Extract numeric value from duration (e.g., "12 hours" -> 12)
+        const durationMatch = course.duration.match(/(\d+)/);
+        if (durationMatch) {
+          totalCoursesTime += parseInt(durationMatch[1]);
+        }
+      }
+    }
+    
+    const completionRate = totalEnrollments > 0 
+      ? Math.round((completedCourses / totalEnrollments) * 100)
+      : 0;
+    
+    return {
+      enrolledCourses: totalEnrollments,
+      completionRate,
+      totalCoursesTime,
+      averageProgress,
+      activeCourses,
+      completedCourses,
+      notStartedCourses
+    };
   }
 
   // Waitlist methods

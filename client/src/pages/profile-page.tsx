@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { User, BookOpen, CreditCard, Settings, Bell } from "lucide-react";
+import { Dashboard } from "@/components/dashboard/Dashboard";
 
 // This is the main content of the profile page, wrapped in ProtectedRoute
 const ProfileContent = () => {
@@ -128,23 +129,7 @@ const ProfileContent = () => {
           </TabsContent>
           
           <TabsContent value="courses" className="mt-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>My Courses</CardTitle>
-                <CardDescription>
-                  Track your progress and continue learning.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="rounded-md border border-dashed p-8 text-center">
-                  <h3 className="text-lg font-medium">No courses yet</h3>
-                  <p className="text-muted-foreground mt-2">
-                    You haven't enrolled in any courses yet. Browse our catalog to get started.
-                  </p>
-                  <Button className="mt-4">Browse Courses</Button>
-                </div>
-              </CardContent>
-            </Card>
+            <Dashboard />
           </TabsContent>
           
           <TabsContent value="billing" className="mt-6">
