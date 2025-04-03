@@ -2,36 +2,35 @@ import { cn } from "@/lib/utils";
 
 interface ProgressIndicatorProps {
   progress: number;
-  size?: "sm" | "md" | "lg";
   showPercentage?: boolean;
   className?: string;
 }
 
-export function ProgressIndicator({
+export function ProgressIndicator({ 
   progress,
-  size = "md",
   showPercentage = true,
-  className,
+  className
 }: ProgressIndicatorProps) {
-  const sizeClasses = {
-    sm: "h-1.5",
-    md: "h-2",
-    lg: "h-3",
+  // Ensure progress is between 0 and 100
+  const validProgress = Math.max(0, Math.min(100, progress));
+  
+  // Determine color based on progress
+  const getColorClass = (progress: number) => {
+    if (progress < 30) return "bg-red-500";
+    if (progress < 70) return "bg-yellow-500";
+    return "bg-green-500";
   };
 
   return (
-    <div className={cn("space-y-1.5", className)}>
-      <div className="w-full bg-gray-200 rounded-full overflow-hidden dark:bg-gray-700">
-        <div
-          className={cn(
-            "bg-primary rounded-full transition-all duration-300 ease-in-out",
-            sizeClasses[size]
-          )}
-          style={{ width: `${progress}%` }}
-        ></div>
+    <div className={cn("flex items-center gap-2", className)}>
+      <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div 
+          className={cn("h-full rounded-full", getColorClass(validProgress))}
+          style={{ width: `${validProgress}%` }}
+        />
       </div>
       {showPercentage && (
-        <p className="text-xs text-right font-medium">{progress}%</p>
+        <span className="text-xs font-medium">{validProgress}%</span>
       )}
     </div>
   );

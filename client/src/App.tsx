@@ -27,13 +27,7 @@ function Router() {
         <Redirect to="/auth/signup" />
       </Route>
       {/* Protected routes */}
-      <Route path="/profile" component={ProfilePage} />
-      <ProtectedRoute path="/dashboard">
-        <div className="container mx-auto py-10">
-          <h1 className="text-2xl font-bold">Dashboard</h1>
-          <p>This is a protected route, only visible if you're logged in.</p>
-        </div>
-      </ProtectedRoute>
+      <Route path="/profile*" component={ProfilePage} />
       <Route component={NotFound} />
     </Switch>
   );

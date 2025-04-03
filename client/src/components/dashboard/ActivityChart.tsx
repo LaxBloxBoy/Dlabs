@@ -50,12 +50,14 @@ export function ActivityChart({
   data = generateMockData() 
 }: ActivityChartProps) {
   return (
-    <Card className={className}>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        {description && <CardDescription>{description}</CardDescription>}
-      </CardHeader>
-      <CardContent>
+    <div className={className}>
+      {(title || description) && (
+        <div className="mb-4">
+          {title && <h3 className="text-lg font-medium">{title}</h3>}
+          {description && <p className="text-sm text-muted-foreground">{description}</p>}
+        </div>
+      )}
+      <div>
         <div style={{ height }}>
           <ResponsiveContainer width="100%" height="100%">
             {chartType === 'line' ? (
@@ -140,7 +142,7 @@ export function ActivityChart({
             )}
           </ResponsiveContainer>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

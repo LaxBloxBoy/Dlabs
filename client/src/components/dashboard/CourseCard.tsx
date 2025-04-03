@@ -1,10 +1,9 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
+import { Play, Clock } from "lucide-react";
 import { ProgressIndicator } from "./ProgressIndicator";
-import { Play, BookOpen } from "lucide-react";
-import { Link } from "wouter";
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 interface CourseCardProps {
   enrollment: {
@@ -30,91 +29,86 @@ interface CourseCardProps {
 }
 
 export function CourseCard({ enrollment, className, onContinue }: CourseCardProps) {
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase();
-  };
-
-  const getStatusClass = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "active":
-        return "bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100";
-      case "completed":
-        return "bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100";
-      case "paused":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100";
+  const getDifficultyColor = (difficulty: string) => {
+    switch (difficulty.toLowerCase()) {
+      case 'beginner':
+        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
+      case 'intermediate':
+        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
+      case 'advanced':
+        return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300';
+      case 'expert':
+        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
       default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-100";
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
     }
   };
 
   return (
-    <Card className={className}>
+    <Card className={cn("bg-white dark:bg-slate-800 overflow-hidden", className)}>
       <CardContent className="p-4">
-        <div className="flex items-start gap-4">
-          <div
-            className="flex-shrink-0 w-16 h-16 rounded-md bg-cover bg-center"
-            style={{ backgroundImage: `url(${enrollment.course.image})` }}
-          ></div>
-          
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap justify-between items-start gap-2">
-              <h3 className="text-base font-medium line-clamp-1">
+        <div className="flex flex-col gap-4">
+          <div className="flex gap-4">
+            <div className="flex-shrink-0">
+              <div className="w-16 h-16 rounded-md bg-gray-200 dark:bg-gray-700 overflow-hidden">
+                <img 
+                  src={enrollment.course.image} 
+                  alt={enrollment.course.title}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "https://via.placeholder.com/150?text=Course";
+                  }}
+                />
+              </div>
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-base font-medium line-clamp-1 mb-1">
                 {enrollment.course.title}
               </h3>
-              <Badge variant="outline" className={getStatusClass(enrollment.status)}>
-                {enrollment.status}
-              </Badge>
-            </div>
-            
-            <div className="flex items-center mt-1">
-              <Badge variant="secondary" className="mr-2 text-xs">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1">
+                <span>{enrollment.course.instructor.name}</span>
+                <span>•</span>
+                <span>{enrollment.course.category.name}</span>
+              </div>
+              <Badge 
+                variant="secondary"
+                className={cn(
+                  "text-xs px-2 py-0.5 rounded-full", 
+                  getDifficultyColor(enrollment.course.difficulty)
+                )}
+              >
                 {enrollment.course.difficulty}
               </Badge>
-              <Badge variant="outline" className="text-xs">
-                {enrollment.course.category.name}
-              </Badge>
             </div>
-            
-            <div className="flex items-center gap-2 mt-2">
-              <Avatar className="h-5 w-5">
-                <AvatarImage src={enrollment.course.instructor.avatar} />
-                <AvatarFallback>
-                  {getInitials(enrollment.course.instructor.name)}
-                </AvatarFallback>
-              </Avatar>
-              <span className="text-xs text-muted-foreground">
-                {enrollment.course.instructor.name}
-              </span>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-muted-foreground">Progress</span>
+              <span className="font-medium">{enrollment.progress}%</span>
             </div>
-            
-            <div className="mt-3">
-              <ProgressIndicator progress={enrollment.progress} size="sm" />
-            </div>
-            
-            <div className="flex items-center justify-between mt-3">
-              <Button
-                variant="outline"
-                size="sm"
-                asChild
-              >
-                <Link to={`/courses/${enrollment.course.id}`}>
-                  <BookOpen className="h-3.5 w-3.5 mr-1" />
-                  <span className="text-xs">Details</span>
-                </Link>
+            <ProgressIndicator 
+              progress={enrollment.progress} 
+              showPercentage={false}
+            />
+          </div>
+
+          <div className="flex gap-2">
+            {enrollment.status === 'completed' ? (
+              <Button className="w-full" variant="outline" size="sm">
+                <Clock className="h-4 w-4 mr-2" />
+                Review
               </Button>
-              
-              <Button
+            ) : (
+              <Button 
+                className="w-full" 
                 size="sm"
                 onClick={() => onContinue?.(enrollment.id)}
               >
-                <Play className="h-3.5 w-3.5 mr-1" />
-                <span className="text-xs">Continue</span>
+                <Play className="h-4 w-4 mr-2" />
+                {enrollment.progress === 0 ? 'Start' : 'Continue'}
               </Button>
-            </div>
+            )}
           </div>
         </div>
       </CardContent>
