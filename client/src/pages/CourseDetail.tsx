@@ -359,11 +359,19 @@ const CourseDetail = () => {
                         </AlertDescription>
                       </Alert>
                       
-                      <Link href="/profile">
-                        <Button className="w-full">
-                          Go to Your Dashboard
-                        </Button>
-                      </Link>
+                      <div className="grid grid-cols-1 gap-4">
+                        <Link href={`/courses/${courseId}/learn`}>
+                          <Button className="w-full">
+                            Start Learning
+                          </Button>
+                        </Link>
+                        
+                        <Link href="/profile">
+                          <Button variant="outline" className="w-full">
+                            Go to Your Dashboard
+                          </Button>
+                        </Link>
+                      </div>
                     </>
                   ) : (
                     <>

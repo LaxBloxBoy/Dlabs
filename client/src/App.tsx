@@ -7,6 +7,7 @@ import CourseDetail from "@/pages/CourseDetail";
 import AllCoursesPage from "@/pages/AllCoursesPage";
 import AuthPage from "@/pages/auth-page";
 import ProfilePage from "@/pages/profile-page";
+import CourseLearningPage from "@/pages/CourseLearningPage";
 import NotFound from "@/pages/not-found";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/lib/protected-route";
@@ -28,6 +29,7 @@ function Router() {
       </Route>
       {/* Protected routes */}
       <Route path="/profile*" component={ProfilePage} />
+      <Route path="/courses/:courseId/learn" component={CourseLearningPage} />
       <Route component={NotFound} />
     </Switch>
   );

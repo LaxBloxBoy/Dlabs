@@ -253,6 +253,148 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Course learning content
+  app.get(`${apiPrefix}/courses/:courseId/learning-content`, async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    try {
+      const courseId = parseInt(req.params.courseId);
+      const userId = req.user.id;
+      
+      // Verify enrollment
+      const isEnrolled = await storage.isUserEnrolledInCourse(userId, courseId);
+      if (!isEnrolled) {
+        return res.status(403).json({ message: "You are not enrolled in this course" });
+      }
+      
+      // Get course details
+      const course = await storage.getCourseById(courseId);
+      if (!course) {
+        return res.status(404).json({ message: "Course not found" });
+      }
+      
+      const instructor = await storage.getInstructorById(course.instructorId);
+      
+      // Get enrollment
+      const enrollments = await storage.getUserEnrollments(userId);
+      const enrollment = enrollments.find(e => e.courseId === courseId);
+      
+      if (!enrollment) {
+        return res.status(404).json({ message: "Enrollment not found" });
+      }
+      
+      // Generate mock course content (in a real app, this would come from the database)
+      const sections = [
+        {
+          id: 1,
+          title: `Introduction to ${course.title}`,
+          steps: [
+            { 
+              id: 1, 
+              title: `What is ${course.title}?`, 
+              type: 'video',
+              content: 'https://example.com/video1.mp4',
+              duration: '10:23',
+              isCompleted: enrollment.progress >= 10
+            },
+            { 
+              id: 2, 
+              title: 'Setting up your environment', 
+              type: 'text',
+              content: 'Follow these steps to set up your environment...',
+              isCompleted: enrollment.progress >= 20
+            },
+            { 
+              id: 3, 
+              title: 'Course overview', 
+              type: 'video',
+              content: 'https://example.com/video2.mp4',
+              duration: '7:45',
+              isCompleted: enrollment.progress >= 30
+            },
+          ]
+        },
+        {
+          id: 2,
+          title: 'Core Concepts',
+          steps: [
+            { 
+              id: 4, 
+              title: 'Basic principles', 
+              type: 'video',
+              content: 'https://example.com/video3.mp4',
+              duration: '15:10',
+              isCompleted: enrollment.progress >= 40
+            },
+            { 
+              id: 5, 
+              title: 'Working with examples', 
+              type: 'text',
+              content: 'In this lesson, we will work through practical examples...',
+              isCompleted: enrollment.progress >= 50
+            },
+            { 
+              id: 6, 
+              title: 'Knowledge check', 
+              type: 'quiz',
+              content: 'Quiz content here',
+              isCompleted: enrollment.progress >= 60
+            },
+            { 
+              id: 7, 
+              title: 'Resources pack', 
+              type: 'download',
+              content: 'https://example.com/resources.zip',
+              isCompleted: enrollment.progress >= 70
+            },
+          ]
+        },
+        {
+          id: 3,
+          title: 'Advanced Techniques',
+          steps: [
+            { 
+              id: 8, 
+              title: 'Real-world applications', 
+              type: 'video',
+              content: 'https://example.com/video4.mp4',
+              duration: '18:30',
+              isCompleted: enrollment.progress >= 80
+            },
+            { 
+              id: 9, 
+              title: 'Case studies', 
+              type: 'text',
+              content: 'Review these case studies to deepen your understanding...',
+              isCompleted: enrollment.progress >= 90
+            },
+            { 
+              id: 10, 
+              title: 'Final assessment', 
+              type: 'quiz',
+              content: 'Final quiz content here',
+              isCompleted: enrollment.progress >= 100
+            },
+          ]
+        },
+      ];
+      
+      // Return learning content with course and enrollment details
+      res.json({
+        id: course.id,
+        title: course.title,
+        instructor: instructor,
+        progress: enrollment.progress,
+        enrollmentId: enrollment.id,
+        sections
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch course learning content" });
+    }
+  });
+  
   // User subscription routes
   app.patch(`${apiPrefix}/user/subscription`, async (req, res) => {
     if (!req.isAuthenticated()) {
