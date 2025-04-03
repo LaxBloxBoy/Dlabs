@@ -11,6 +11,10 @@ import CourseLearningPage from "@/pages/CourseLearningPage";
 import NotFound from "@/pages/not-found";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/lib/protected-route";
+import CoursesPage from "@/pages/profile/CoursesPage";
+import BillingPage from "@/pages/profile/BillingPage";
+import NotificationsPage from "@/pages/profile/NotificationsPage";
+import SettingsPage from "@/pages/profile/SettingsPage";
 
 function Router() {
   return (
@@ -28,7 +32,11 @@ function Router() {
         <Redirect to="/auth/signup" />
       </Route>
       {/* Protected routes */}
-      <Route path="/profile*" component={ProfilePage} />
+      <Route path="/profile" component={ProfilePage} />
+      <Route path="/profile/courses" component={CoursesPage} />
+      <Route path="/profile/billing" component={BillingPage} />
+      <Route path="/profile/notifications" component={NotificationsPage} />
+      <Route path="/profile/settings" component={SettingsPage} />
       <Route path="/courses/:courseId/learn" component={CourseLearningPage} />
       <Route component={NotFound} />
     </Switch>

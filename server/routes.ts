@@ -6,6 +6,26 @@ import { z } from "zod";
 import { setupAuth } from "./auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // User subscription management
+  app.patch("/api/user/subscription", (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).send("Unauthorized");
+    }
+    
+    const { subscriptionTier, hasUnlimitedAccess } = req.body;
+    if (!subscriptionTier) {
+      return res.status(400).send("Subscription tier is required");
+    }
+    
+    storage.updateUserSubscription(req.user.id, subscriptionTier, hasUnlimitedAccess || false)
+      .then(user => {
+        res.json(user);
+      })
+      .catch(err => {
+        console.error("Error updating subscription:", err);
+        res.status(500).send("Failed to update subscription");
+      });
+  });
   // Set up authentication
   setupAuth(app);
   
