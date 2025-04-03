@@ -149,9 +149,9 @@ const Navbar = () => {
               </NavigationMenu>
 
               <Link 
-                href="/all-courses" 
+                href="/courses" 
                 className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                  isActive("/all-courses") 
+                  isActive("/courses") 
                     ? "border-primary text-primary" 
                     : "border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-800"
                 }`}
@@ -232,17 +232,7 @@ const Navbar = () => {
           >
             Courses
           </Link>
-          <Link 
-            href="/all-courses" 
-            className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
-              isActive("/all-courses") 
-                ? "bg-slate-50 border-primary text-primary" 
-                : "border-transparent text-slate-600 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-800"
-            }`}
-            onClick={closeMenu}
-          >
-            All Courses
-          </Link>
+          {/* Remove duplicate Courses link in mobile menu */}
           <Link 
             href="/#categories" 
             className="border-transparent text-slate-600 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
