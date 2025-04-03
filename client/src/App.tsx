@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import Home from "@/pages/Home";
 import CourseDetail from "@/pages/CourseDetail";
+import AboutPage from "@/pages/AboutPage";
 import AllCoursesPage from "@/pages/AllCoursesPage";
 import AuthPage from "@/pages/auth-page";
 import ProfilePage from "@/pages/profile-page";
@@ -40,6 +41,7 @@ function Router() {
       <Route path="/profile/settings" component={SettingsPage} />
       <Route path="/courses/:courseId/learn" component={CourseLearningPage} />
       <Route path="/subscriptions" component={SubscriptionPage} />
+      <Route path="/about" element={<AboutPage />} />
       <Route component={NotFound} />
     </Switch>
   );
