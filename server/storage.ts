@@ -1,3 +1,8 @@
+import session from "express-session";
+import { eq } from "drizzle-orm";
+import connectPgSimple from "connect-pg-simple";
+import { db, pool } from "./db";
+
 import {
   users,
   type User,
@@ -23,6 +28,9 @@ import {
 } from "@shared/schema";
 
 export interface IStorage {
+  // Session store for authentication
+  sessionStore: session.Store;
+  
   // User methods
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
@@ -57,316 +65,289 @@ export interface IStorage {
   createTestimonial(testimonial: InsertTestimonial): Promise<Testimonial>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<number, User>;
-  private categories: Map<number, Category>;
-  private instructors: Map<number, Instructor>;
-  private courses: Map<number, Course>;
-  private waitlistEntries: Map<number, Waitlist>;
-  private contactSubmissions: Map<number, ContactSubmission>;
-  private testimonials: Map<number, Testimonial>;
+const PgStore = connectPgSimple(session);
 
-  private userIdCounter: number;
-  private categoryIdCounter: number;
-  private instructorIdCounter: number;
-  private courseIdCounter: number;
-  private waitlistIdCounter: number;
-  private contactSubmissionIdCounter: number;
-  private testimonialIdCounter: number;
+export class PostgresStorage implements IStorage {
+  sessionStore: session.Store;
 
   constructor() {
-    this.users = new Map();
-    this.categories = new Map();
-    this.instructors = new Map();
-    this.courses = new Map();
-    this.waitlistEntries = new Map();
-    this.contactSubmissions = new Map();
-    this.testimonials = new Map();
-
-    this.userIdCounter = 1;
-    this.categoryIdCounter = 1;
-    this.instructorIdCounter = 1;
-    this.courseIdCounter = 1;
-    this.waitlistIdCounter = 1;
-    this.contactSubmissionIdCounter = 1;
-    this.testimonialIdCounter = 1;
-
-    // Initialize with sample data
-    this.initSampleData();
+    this.sessionStore = new PgStore({
+      conObject: {
+        connectionString: process.env.DATABASE_URL!,
+      },
+      createTableIfMissing: true,
+    });
+    
+    // Initialize the database with sample data
+    this.initDatabase();
   }
 
   // User methods
   async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
+    const result = await db.select().from(users).where(eq(users.id, id)).limit(1);
+    return result[0];
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username
-    );
+    const result = await db.select().from(users).where(eq(users.username, username)).limit(1);
+    return result[0];
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.userIdCounter++;
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+  async createUser(user: InsertUser): Promise<User> {
+    const result = await db.insert(users).values(user).returning();
+    return result[0];
   }
 
   // Category methods
   async getAllCategories(): Promise<Category[]> {
-    return Array.from(this.categories.values());
+    return await db.select().from(categories);
   }
 
   async getCategoryById(id: number): Promise<Category | undefined> {
-    return this.categories.get(id);
+    const result = await db.select().from(categories).where(eq(categories.id, id)).limit(1);
+    return result[0];
   }
 
-  async createCategory(insertCategory: InsertCategory): Promise<Category> {
-    const id = this.categoryIdCounter++;
-    const category: Category = { ...insertCategory, id };
-    this.categories.set(id, category);
-    return category;
+  async createCategory(category: InsertCategory): Promise<Category> {
+    const result = await db.insert(categories).values(category).returning();
+    return result[0];
   }
 
   // Instructor methods
   async getAllInstructors(): Promise<Instructor[]> {
-    return Array.from(this.instructors.values());
+    return await db.select().from(instructors);
   }
 
   async getInstructorById(id: number): Promise<Instructor | undefined> {
-    return this.instructors.get(id);
+    const result = await db.select().from(instructors).where(eq(instructors.id, id)).limit(1);
+    return result[0];
   }
 
-  async createInstructor(insertInstructor: InsertInstructor): Promise<Instructor> {
-    const id = this.instructorIdCounter++;
-    const instructor: Instructor = { ...insertInstructor, id };
-    this.instructors.set(id, instructor);
-    return instructor;
+  async createInstructor(instructor: InsertInstructor): Promise<Instructor> {
+    const result = await db.insert(instructors).values(instructor).returning();
+    return result[0];
   }
 
   // Course methods
   async getAllCourses(): Promise<Course[]> {
-    return Array.from(this.courses.values());
+    return await db.select().from(courses);
   }
 
   async getCourseById(id: number): Promise<Course | undefined> {
-    return this.courses.get(id);
+    const result = await db.select().from(courses).where(eq(courses.id, id)).limit(1);
+    return result[0];
   }
 
   async getCoursesByCategory(categoryId: number): Promise<Course[]> {
-    return Array.from(this.courses.values()).filter(
-      (course) => course.categoryId === categoryId
-    );
+    return await db.select().from(courses).where(eq(courses.categoryId, categoryId));
   }
 
-  async createCourse(insertCourse: InsertCourse): Promise<Course> {
-    const id = this.courseIdCounter++;
-    const course: Course = { ...insertCourse, id };
-    this.courses.set(id, course);
-    return course;
+  async createCourse(course: InsertCourse): Promise<Course> {
+    const result = await db.insert(courses).values(course).returning();
+    return result[0];
   }
 
   // Waitlist methods
-  async addToWaitlist(insertWaitlist: InsertWaitlist): Promise<Waitlist> {
-    const id = this.waitlistIdCounter++;
-    const entry: Waitlist = { 
-      ...insertWaitlist, 
-      id, 
-      createdAt: new Date() 
-    };
-    this.waitlistEntries.set(id, entry);
-    return entry;
+  async addToWaitlist(entry: InsertWaitlist): Promise<Waitlist> {
+    const result = await db.insert(waitlist).values(entry).returning();
+    return result[0];
   }
 
   async getWaitlistEntries(): Promise<Waitlist[]> {
-    return Array.from(this.waitlistEntries.values());
+    return await db.select().from(waitlist);
   }
 
   // Contact submissions methods
-  async createContactSubmission(insertSubmission: InsertContactSubmission): Promise<ContactSubmission> {
-    const id = this.contactSubmissionIdCounter++;
-    const submission: ContactSubmission = { 
-      ...insertSubmission, 
-      id, 
-      createdAt: new Date() 
-    };
-    this.contactSubmissions.set(id, submission);
-    return submission;
+  async createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission> {
+    const result = await db.insert(contactSubmissions).values(submission).returning();
+    return result[0];
   }
 
   async getContactSubmissions(): Promise<ContactSubmission[]> {
-    return Array.from(this.contactSubmissions.values());
+    return await db.select().from(contactSubmissions);
   }
 
   // Testimonials methods
   async getAllTestimonials(): Promise<Testimonial[]> {
-    return Array.from(this.testimonials.values());
+    return await db.select().from(testimonials);
   }
 
-  async createTestimonial(insertTestimonial: InsertTestimonial): Promise<Testimonial> {
-    const id = this.testimonialIdCounter++;
-    const testimonial: Testimonial = { ...insertTestimonial, id };
-    this.testimonials.set(id, testimonial);
-    return testimonial;
+  async createTestimonial(testimonial: InsertTestimonial): Promise<Testimonial> {
+    const result = await db.insert(testimonials).values(testimonial).returning();
+    return result[0];
   }
 
-  // Initialize sample data
-  private initSampleData() {
-    // Sample categories
-    const categoriesData: InsertCategory[] = [
-      { name: "Programming", icon: "code", courseCount: 24 },
-      { name: "Data Science", icon: "chart-line", courseCount: 18 },
-      { name: "Design", icon: "paint-brush", courseCount: 15 },
-      { name: "Business", icon: "briefcase", courseCount: 12 },
-      { name: "Marketing", icon: "bullhorn", courseCount: 10 },
-      { name: "IT & Software", icon: "cogs", courseCount: 22 },
-      { name: "Languages", icon: "language", courseCount: 8 },
-      { name: "Personal Development", icon: "lightbulb", courseCount: 14 }
-    ];
-
-    categoriesData.forEach(category => {
-      this.createCategory(category);
-    });
-
-    // Sample instructors
-    const instructorsData: InsertInstructor[] = [
-      {
-        name: "John Smith",
-        avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-        bio: "Senior Web Developer with 10+ years of experience"
-      },
-      {
-        name: "Sarah Johnson",
-        avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-        bio: "Data Scientist and Machine Learning Engineer"
-      },
-      {
-        name: "Michael Chen",
-        avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-        bio: "UX/UI Designer with experience at top tech companies"
+  // Initialize database with sample data
+  private async initDatabase() {
+    try {
+      // Check if we already have data in the database
+      const existingCategories = await this.getAllCategories();
+      if (existingCategories.length > 0) {
+        console.log("Database already has data, skipping initialization");
+        return;
       }
-    ];
 
-    instructorsData.forEach(instructor => {
-      this.createInstructor(instructor);
-    });
+      console.log("Initializing database with sample data...");
 
-    // Sample courses
-    const coursesData: InsertCourse[] = [
-      {
-        title: "Web Development Bootcamp",
-        description: "Learn modern web development with JavaScript, React, and Node.js in this comprehensive bootcamp.",
-        image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=600&q=80",
-        price: 499,
-        difficulty: "Intermediate",
-        duration: "8 weeks",
-        categoryId: 1, // Programming
-        instructorId: 1, // John Smith
-        isPopular: true,
-        isNew: false,
-        rating: 4.9
-      },
-      {
-        title: "Data Science Fundamentals",
-        description: "Master the core concepts of data analysis, Python programming, and machine learning algorithms.",
-        image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=600&q=80",
-        price: 399,
-        difficulty: "Beginner",
-        duration: "6 weeks",
-        categoryId: 2, // Data Science
-        instructorId: 2, // Sarah Johnson
-        isPopular: false,
-        isNew: true,
-        rating: 4.7
-      },
-      {
-        title: "UX/UI Design Masterclass",
-        description: "Learn the principles of user experience and interface design to create beautiful, functional web applications.",
-        image: "https://images.unsplash.com/photo-1545235617-9465d2a55698?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=600&q=80",
-        price: 549,
-        difficulty: "All Levels",
-        duration: "10 weeks",
-        categoryId: 3, // Design
-        instructorId: 3, // Michael Chen
-        isPopular: false,
-        isNew: false,
-        rating: 4.8
-      },
-      {
-        title: "JavaScript for Beginners",
-        description: "Start your programming journey with JavaScript, the language of the web.",
-        image: "https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=600&q=80",
-        price: 299,
-        difficulty: "Beginner",
-        duration: "4 weeks",
-        categoryId: 1, // Programming
-        instructorId: 1, // John Smith
-        isPopular: true,
-        isNew: false,
-        rating: 4.6
-      },
-      {
-        title: "Advanced React & Redux",
-        description: "Take your React skills to the next level with advanced patterns and Redux state management.",
-        image: "https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=600&q=80",
-        price: 449,
-        difficulty: "Advanced",
-        duration: "6 weeks",
-        categoryId: 1, // Programming
-        instructorId: 1, // John Smith
-        isPopular: false,
-        isNew: true,
-        rating: 4.9
-      },
-      {
-        title: "Python for Data Analysis",
-        description: "Learn how to use Python for data manipulation, visualization, and analysis.",
-        image: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=600&q=80",
-        price: 349,
-        difficulty: "Intermediate",
-        duration: "5 weeks",
-        categoryId: 2, // Data Science
-        instructorId: 2, // Sarah Johnson
-        isPopular: true,
-        isNew: false,
-        rating: 4.8
+      // Sample categories
+      const categoriesData: InsertCategory[] = [
+        { name: "Programming", icon: "code", courseCount: 24 },
+        { name: "Data Science", icon: "chart-line", courseCount: 18 },
+        { name: "Design", icon: "paint-brush", courseCount: 15 },
+        { name: "Business", icon: "briefcase", courseCount: 12 },
+        { name: "Marketing", icon: "bullhorn", courseCount: 10 },
+        { name: "IT & Software", icon: "cogs", courseCount: 22 },
+        { name: "Languages", icon: "language", courseCount: 8 },
+        { name: "Personal Development", icon: "lightbulb", courseCount: 14 }
+      ];
+
+      for (const category of categoriesData) {
+        await this.createCategory(category);
       }
-    ];
 
-    coursesData.forEach(course => {
-      this.createCourse(course);
-    });
+      // Sample instructors
+      const instructorsData: InsertInstructor[] = [
+        {
+          name: "John Smith",
+          avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+          bio: "Senior Web Developer with 10+ years of experience"
+        },
+        {
+          name: "Sarah Johnson",
+          avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+          bio: "Data Scientist and Machine Learning Engineer"
+        },
+        {
+          name: "Michael Chen",
+          avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+          bio: "UX/UI Designer with experience at top tech companies"
+        }
+      ];
 
-    // Sample testimonials
-    const testimonialsData: InsertTestimonial[] = [
-      {
-        name: "Emily Walker",
-        avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-        rating: 5,
-        text: "The Web Development Bootcamp was exactly what I needed to transition into tech. Within 3 months of completing the course, I landed my first developer job.",
-        program: "Web Development Graduate"
-      },
-      {
-        name: "David Kim",
-        avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-        rating: 4,
-        text: "The Data Science course gave me practical skills I use daily. The instructors were knowledgeable and the projects helped build a strong portfolio.",
-        program: "Data Science Graduate"
-      },
-      {
-        name: "Jessica Rodriguez",
-        avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-        rating: 5,
-        text: "I took the UX/UI Design Masterclass while working full-time, and the flexible schedule was perfect. I've completely redesigned our product based on what I learned.",
-        program: "UX/UI Design Graduate"
+      for (const instructor of instructorsData) {
+        await this.createInstructor(instructor);
       }
-    ];
 
-    testimonialsData.forEach(testimonial => {
-      this.createTestimonial(testimonial);
-    });
+      // Sample courses
+      const coursesData: InsertCourse[] = [
+        {
+          title: "Web Development Bootcamp",
+          description: "Learn modern web development with JavaScript, React, and Node.js in this comprehensive bootcamp.",
+          image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=600&q=80",
+          price: 499,
+          difficulty: "Intermediate",
+          duration: "8 weeks",
+          categoryId: 1, // Programming
+          instructorId: 1, // John Smith
+          isPopular: true,
+          isNew: false,
+          rating: 4.9
+        },
+        {
+          title: "Data Science Fundamentals",
+          description: "Master the core concepts of data analysis, Python programming, and machine learning algorithms.",
+          image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=600&q=80",
+          price: 399,
+          difficulty: "Beginner",
+          duration: "6 weeks",
+          categoryId: 2, // Data Science
+          instructorId: 2, // Sarah Johnson
+          isPopular: false,
+          isNew: true,
+          rating: 4.7
+        },
+        {
+          title: "UX/UI Design Masterclass",
+          description: "Learn the principles of user experience and interface design to create beautiful, functional web applications.",
+          image: "https://images.unsplash.com/photo-1545235617-9465d2a55698?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=600&q=80",
+          price: 549,
+          difficulty: "All Levels",
+          duration: "10 weeks",
+          categoryId: 3, // Design
+          instructorId: 3, // Michael Chen
+          isPopular: false,
+          isNew: false,
+          rating: 4.8
+        },
+        {
+          title: "JavaScript for Beginners",
+          description: "Start your programming journey with JavaScript, the language of the web.",
+          image: "https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=600&q=80",
+          price: 299,
+          difficulty: "Beginner",
+          duration: "4 weeks",
+          categoryId: 1, // Programming
+          instructorId: 1, // John Smith
+          isPopular: true,
+          isNew: false,
+          rating: 4.6
+        },
+        {
+          title: "Advanced React & Redux",
+          description: "Take your React skills to the next level with advanced patterns and Redux state management.",
+          image: "https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=600&q=80",
+          price: 449,
+          difficulty: "Advanced",
+          duration: "6 weeks",
+          categoryId: 1, // Programming
+          instructorId: 1, // John Smith
+          isPopular: false,
+          isNew: true,
+          rating: 4.9
+        },
+        {
+          title: "Python for Data Analysis",
+          description: "Learn how to use Python for data manipulation, visualization, and analysis.",
+          image: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=600&q=80",
+          price: 349,
+          difficulty: "Intermediate",
+          duration: "5 weeks",
+          categoryId: 2, // Data Science
+          instructorId: 2, // Sarah Johnson
+          isPopular: true,
+          isNew: false,
+          rating: 4.8
+        }
+      ];
+
+      for (const course of coursesData) {
+        await this.createCourse(course);
+      }
+
+      // Sample testimonials
+      const testimonialsData: InsertTestimonial[] = [
+        {
+          name: "Emily Walker",
+          avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+          rating: 5,
+          text: "The Web Development Bootcamp was exactly what I needed to transition into tech. Within 3 months of completing the course, I landed my first developer job.",
+          program: "Web Development Graduate"
+        },
+        {
+          name: "David Kim",
+          avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+          rating: 4,
+          text: "The Data Science course gave me practical skills I use daily. The instructors were knowledgeable and the projects helped build a strong portfolio.",
+          program: "Data Science Graduate"
+        },
+        {
+          name: "Jessica Rodriguez",
+          avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+          rating: 5,
+          text: "I took the UX/UI Design Masterclass while working full-time, and the flexible schedule was perfect. I've completely redesigned our product based on what I learned.",
+          program: "UX/UI Design Graduate"
+        }
+      ];
+
+      for (const testimonial of testimonialsData) {
+        await this.createTestimonial(testimonial);
+      }
+
+      console.log("Database initialized successfully");
+    } catch (error) {
+      console.error("Error initializing database:", error);
+    }
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new PostgresStorage();
