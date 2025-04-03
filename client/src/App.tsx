@@ -8,6 +8,7 @@ import AllCoursesPage from "@/pages/AllCoursesPage";
 import AuthPage from "@/pages/auth-page";
 import ProfilePage from "@/pages/profile-page";
 import CourseLearningPage from "@/pages/CourseLearningPage";
+import SubscriptionPage from "@/pages/SubscriptionPage";
 import NotFound from "@/pages/not-found";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/lib/protected-route";
@@ -38,6 +39,7 @@ function Router() {
       <Route path="/profile/notifications" component={NotificationsPage} />
       <Route path="/profile/settings" component={SettingsPage} />
       <Route path="/courses/:courseId/learn" component={CourseLearningPage} />
+      <Route path="/subscriptions" component={SubscriptionPage} />
       <Route component={NotFound} />
     </Switch>
   );

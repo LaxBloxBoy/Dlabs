@@ -83,7 +83,21 @@ const CourseDetail = () => {
       if (error.message.includes("Payment required")) {
         toast({
           title: "Subscription Required",
-          description: "You need to upgrade to a premium subscription to access this course.",
+          description: (
+            <div className="flex flex-col space-y-2">
+              <p>You need to upgrade to a premium subscription to access this course.</p>
+              <a 
+                href="/subscriptions" 
+                className="text-emerald-600 font-medium hover:underline"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate("/subscriptions");
+                }}
+              >
+                View subscription options →
+              </a>
+            </div>
+          ),
           variant: "destructive",
         });
       } else {
@@ -405,7 +419,11 @@ const CourseDetail = () => {
                               <CreditCard className="h-4 w-4 text-amber-600" />
                               <AlertTitle className="text-amber-800 font-medium">Course Purchase</AlertTitle>
                               <AlertDescription className="text-amber-700 text-sm">
-                                You can purchase this course or upgrade to a premium membership for unlimited access.
+                                You can purchase this course or {" "}
+                                <Link href="/subscriptions" className="text-emerald-600 font-medium hover:underline">
+                                  upgrade to a premium membership
+                                </Link> {" "}
+                                for unlimited access to all courses.
                               </AlertDescription>
                             </Alert>
                           ) : null}

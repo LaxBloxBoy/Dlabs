@@ -140,6 +140,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to fetch testimonials" });
     }
   });
+  
+  // Subscription management routes
+  app.post(`${apiPrefix}/subscriptions/upgrade`, async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    
+    try {
+      const { tier } = req.body;
+      const userId = req.user.id;
+      
+      // Validate tier selection
+      if (!['standard', 'premium', 'unlimited'].includes(tier)) {
+        return res.status(400).json({ message: "Invalid subscription tier" });
+      }
+      
+      // Set unlimited access based on tier
+      const hasUnlimitedAccess = tier === 'unlimited' || tier === 'premium';
+      
+      // Update user subscription
+      const updatedUser = await storage.updateUserSubscription(userId, tier, hasUnlimitedAccess);
+      
+      // Don't include the password in the response
+      const { password, ...userWithoutPassword } = updatedUser;
+      
+      res.json({
+        message: "Subscription updated successfully",
+        user: userWithoutPassword,
+        subscription: {
+          tier,
+          hasUnlimitedAccess,
+          features: tier === 'premium' || tier === 'unlimited' 
+            ? ['Access to all courses', 'HD video quality', 'Offline downloads', 'Priority support']
+            : ['Access to standard courses', 'Regular support']
+        }
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update subscription" });
+    }
+  });
 
   // Instructors routes
   app.get(`${apiPrefix}/instructors`, async (req, res) => {

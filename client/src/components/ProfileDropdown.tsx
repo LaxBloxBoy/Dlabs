@@ -8,7 +8,8 @@ import {
   CreditCard, 
   Bell, 
   LogOut, 
-  ChevronDown 
+  ChevronDown,
+  Crown
 } from "lucide-react";
 
 import {
@@ -72,6 +73,17 @@ const ProfileDropdown = () => {
             <DropdownMenuItem>
               <BookOpen className="mr-2 h-4 w-4" />
               <span>My Courses</span>
+            </DropdownMenuItem>
+          </Link>
+          <Link href="/subscriptions">
+            <DropdownMenuItem>
+              <Crown className="mr-2 h-4 w-4" />
+              <span>Subscriptions</span>
+              {user.subscriptionTier !== "free" && (
+                <span className="ml-auto bg-emerald-100 text-emerald-800 text-xs px-2 py-0.5 rounded-full">
+                  {user.subscriptionTier}
+                </span>
+              )}
             </DropdownMenuItem>
           </Link>
           <Link href="/profile/billing">
