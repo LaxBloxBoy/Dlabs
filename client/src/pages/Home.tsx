@@ -130,12 +130,12 @@ const Home = () => {
       <Navbar />
 
       {/* Hero Section - Enhanced with animated elements and gradient */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900 text-white">
+      <section className="relative overflow-hidden bg-gradient-to-br from-emerald-900 via-teal-800 to-emerald-900 text-white">
         {/* Abstract background shapes */}
         <div className="absolute inset-0 overflow-hidden opacity-10">
-          <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-indigo-500 blur-3xl"></div>
-          <div className="absolute top-40 -left-40 w-80 h-80 rounded-full bg-blue-500 blur-3xl"></div>
-          <div className="absolute bottom-40 right-20 w-80 h-80 rounded-full bg-violet-500 blur-3xl"></div>
+          <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-emerald-500 blur-3xl"></div>
+          <div className="absolute top-40 -left-40 w-80 h-80 rounded-full bg-teal-500 blur-3xl"></div>
+          <div className="absolute bottom-40 right-20 w-80 h-80 rounded-full bg-green-500 blur-3xl"></div>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 relative z-10">
@@ -145,19 +145,19 @@ const Home = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <Badge className="mb-4 bg-indigo-600 hover:bg-indigo-700 text-white border-0 py-1 px-3 text-sm">
+              <Badge className="mb-4 bg-emerald-600 hover:bg-emerald-700 text-white border-0 py-1 px-3 text-sm">
                 <Sparkles className="h-3.5 w-3.5 mr-1" /> New ISO Certification Courses Available
               </Badge>
-              <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-indigo-200">
+              <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-emerald-200">
                 Elevate Your Career with D-Code Labs
               </h1>
-              <p className="text-xl text-slate-300 mb-8 max-w-xl">
+              <p className="text-xl text-slate-100 mb-8 max-w-xl">
                 Our cutting-edge platform combines expert-led instruction, interactive learning experiences, and industry-recognized certifications to accelerate your professional growth.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <Button 
                   size="lg" 
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 rounded-full font-medium"
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 rounded-full font-medium"
                   onClick={() => document.getElementById("courses")?.scrollIntoView({ behavior: "smooth" })}
                 >
                   Explore Courses
@@ -176,16 +176,16 @@ const Home = () => {
                   {[...Array(5)].map((_, i) => (
                     <div 
                       key={i} 
-                      className="inline-block h-8 w-8 rounded-full ring-2 ring-indigo-900" 
+                      className="inline-block h-8 w-8 rounded-full ring-2 ring-emerald-900" 
                       style={{
-                        backgroundColor: `hsl(${210 + i * 15}, 70%, ${50 + i * 5}%)`,
+                        backgroundColor: `hsl(${160 + i * 10}, 70%, ${50 + i * 5}%)`,
                         zIndex: 5 - i
                       }}
                     />
                   ))}
                 </div>
                 <div>
-                  <p className="text-indigo-200 text-sm font-medium">
+                  <p className="text-emerald-200 text-sm font-medium">
                     Trusted by <span className="font-bold text-white">10,000+</span> professionals
                   </p>
                 </div>
@@ -199,7 +199,7 @@ const Home = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <div className="relative">
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-violet-500 rounded-2xl blur opacity-30"></div>
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl blur opacity-30"></div>
                 <div className="relative bg-slate-800 rounded-xl shadow-2xl border border-slate-700/50 overflow-hidden">
                   <div className="px-6 py-6">
                     <div className="flex items-center justify-between mb-6">
@@ -216,20 +216,20 @@ const Home = () => {
                     <div className="space-y-5">
                       <div className="rounded-lg bg-slate-700/50 p-4">
                         <div className="flex items-center gap-3 mb-3">
-                          <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
+                          <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center">
                             <BookOpen className="h-5 w-5 text-white" />
                           </div>
                           <div className="text-left">
                             <h3 className="font-medium text-white">ISO 9001 Certification</h3>
-                            <p className="text-xs text-indigo-200">Quality Management Systems</p>
+                            <p className="text-xs text-emerald-200">Quality Management Systems</p>
                           </div>
                         </div>
                         <div className="h-2 bg-slate-600 rounded-full overflow-hidden">
-                          <div className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 w-[75%]"></div>
+                          <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 w-[75%]"></div>
                         </div>
                         <div className="flex justify-between items-center mt-2">
                           <span className="text-xs text-slate-400">Progress: 75%</span>
-                          <Badge className="bg-indigo-500 text-xs">In Progress</Badge>
+                          <Badge className="bg-emerald-500 text-xs">In Progress</Badge>
                         </div>
                       </div>
 
@@ -254,27 +254,27 @@ const Home = () => {
 
                       <div className="rounded-lg bg-slate-700/50 p-4">
                         <div className="flex items-center gap-3 mb-3">
-                          <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                          <div className="w-10 h-10 bg-teal-600 rounded-lg flex items-center justify-center">
                             <BarChart className="h-5 w-5 text-white" />
                           </div>
                           <div className="text-left">
                             <h3 className="font-medium text-white">Data Analytics</h3>
-                            <p className="text-xs text-blue-200">Business Intelligence</p>
+                            <p className="text-xs text-teal-200">Business Intelligence</p>
                           </div>
                         </div>
                         <div className="h-2 bg-slate-600 rounded-full overflow-hidden">
-                          <div className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 w-[45%]"></div>
+                          <div className="h-full bg-gradient-to-r from-teal-500 to-emerald-500 w-[45%]"></div>
                         </div>
                         <div className="flex justify-between items-center mt-2">
                           <span className="text-xs text-slate-400">Progress: 45%</span>
-                          <Badge className="bg-blue-500 text-xs">In Progress</Badge>
+                          <Badge className="bg-teal-500 text-xs">In Progress</Badge>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-indigo-600 rounded-full flex items-center justify-center shadow-lg">
+              <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-emerald-600 rounded-full flex items-center justify-center shadow-lg">
                 <GraduationCap className="h-12 w-12 text-white" />
               </div>
             </motion.div>
@@ -290,7 +290,7 @@ const Home = () => {
       <section ref={statsRef} className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-sm font-semibold text-indigo-600 tracking-widest uppercase">
+            <h2 className="text-sm font-semibold text-emerald-600 tracking-widest uppercase">
               Why D-Code Labs Stands Out
             </h2>
             <p className="mt-2 text-4xl font-bold tracking-tight text-slate-900">
@@ -304,8 +304,8 @@ const Home = () => {
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <Card className="border-0 shadow-md bg-white hover:shadow-xl transition-shadow duration-300">
               <CardContent className="p-6 text-center">
-                <div className="rounded-full bg-indigo-100 p-3 w-14 h-14 mx-auto mb-4 flex items-center justify-center">
-                  <GraduationCap className="h-7 w-7 text-indigo-600" />
+                <div className="rounded-full bg-emerald-100 p-3 w-14 h-14 mx-auto mb-4 flex items-center justify-center">
+                  <GraduationCap className="h-7 w-7 text-emerald-600" />
                 </div>
                 <h3 className="text-2xl font-bold text-slate-900">50+</h3>
                 <p className="text-slate-500 mt-2">Expert Instructors</p>
@@ -314,8 +314,8 @@ const Home = () => {
 
             <Card className="border-0 shadow-md bg-white hover:shadow-xl transition-shadow duration-300">
               <CardContent className="p-6 text-center">
-                <div className="rounded-full bg-blue-100 p-3 w-14 h-14 mx-auto mb-4 flex items-center justify-center">
-                  <BookOpen className="h-7 w-7 text-blue-600" />
+                <div className="rounded-full bg-teal-100 p-3 w-14 h-14 mx-auto mb-4 flex items-center justify-center">
+                  <BookOpen className="h-7 w-7 text-teal-600" />
                 </div>
                 <h3 className="text-2xl font-bold text-slate-900">200+</h3>
                 <p className="text-slate-500 mt-2">Specialized Courses</p>
@@ -368,7 +368,7 @@ const Home = () => {
                 </ul>
                 <div className="mt-8">
                   <Button 
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white"
                     onClick={() => document.getElementById("categories")?.scrollIntoView({ behavior: "smooth" })}
                   >
                     Explore Categories
@@ -377,17 +377,17 @@ const Home = () => {
               </div>
 
               <div className="col-span-2 relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-2xl blur opacity-20"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl blur opacity-20"></div>
                 <div className="relative bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden p-8">
                   <div className="grid gap-8 md:grid-cols-2">
                     {[
                       {
-                        icon: <BookOpen className="h-7 w-7 text-indigo-600" />,
+                        icon: <BookOpen className="h-7 w-7 text-emerald-600" />,
                         title: "Comprehensive Curriculum",
                         description: "Structured learning paths designed by industry experts to ensure you master every concept."
                       },
                       {
-                        icon: <Layers className="h-7 w-7 text-blue-600" />,
+                        icon: <Layers className="h-7 w-7 text-teal-600" />,
                         title: "Modular Learning",
                         description: "Break down complex topics into manageable modules for more effective learning."
                       },
@@ -425,7 +425,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-12">
             <div>
-              <h2 className="text-sm font-semibold text-indigo-600 tracking-widest uppercase">
+              <h2 className="text-sm font-semibold text-emerald-600 tracking-widest uppercase">
                 Featured This Month
               </h2>
               <p className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
@@ -434,7 +434,7 @@ const Home = () => {
             </div>
             <Button 
               variant="outline" 
-              className="border-indigo-200 text-indigo-600 hover:bg-indigo-50"
+              className="border-emerald-200 text-emerald-600 hover:bg-emerald-50"
               onClick={() => setLocation("/courses")}
             >
               View All Courses
@@ -459,14 +459,14 @@ const Home = () => {
                         </Badge>
                       )}
                       {course.isPopular && (
-                        <Badge className="absolute top-2 right-2 bg-indigo-600 text-white border-0">
+                        <Badge className="absolute top-2 right-2 bg-emerald-600 text-white border-0">
                           Popular
                         </Badge>
                       )}
                     </div>
                     <div className="p-4 bg-white border border-slate-100 rounded-b-xl shadow-sm">
                       <div className="flex items-center text-sm text-slate-500 mb-2">
-                        <BookOpen className="h-4 w-4 mr-1 text-indigo-500" />
+                        <BookOpen className="h-4 w-4 mr-1 text-emerald-500" />
                         <span>{course.difficulty}</span>
                         <span className="mx-2">•</span>
                         <span>{course.duration}</span>
@@ -485,7 +485,7 @@ const Home = () => {
                       <Button 
                         variant="default" 
                         size="sm" 
-                        className="w-full bg-indigo-600 hover:bg-indigo-700"
+                        className="w-full bg-emerald-600 hover:bg-emerald-700"
                         onClick={() => setLocation(`/courses/${course.id}`)}
                       >
                         Learn More
@@ -499,7 +499,7 @@ const Home = () => {
               {[...Array(3)].map((_, i) => (
                 <button 
                   key={i}
-                  className={`w-2 h-2 rounded-full ${i === 0 ? 'bg-indigo-600' : 'bg-slate-300'}`}
+                  className={`w-2 h-2 rounded-full ${i === 0 ? 'bg-emerald-600' : 'bg-slate-300'}`}
                 >
                 </button>
               ))}
@@ -513,7 +513,7 @@ const Home = () => {
         <section className="py-24 bg-gradient-to-b from-slate-50 to-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-sm font-semibold text-indigo-600 tracking-widest uppercase">
+              <h2 className="text-sm font-semibold text-emerald-600 tracking-widest uppercase">
                 Our Curriculum
               </h2>
               <p className="mt-2 text-4xl font-bold tracking-tight text-slate-900">
@@ -616,7 +616,7 @@ const Home = () => {
         <section className="py-24 bg-slate-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-sm font-semibold text-indigo-600 tracking-widest uppercase">
+              <h2 className="text-sm font-semibold text-emerald-600 tracking-widest uppercase">
                 Diverse Curriculum
               </h2>
               <p className="mt-2 text-4xl font-bold tracking-tight text-slate-900">
@@ -665,7 +665,7 @@ const Home = () => {
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-sm font-semibold text-indigo-600 tracking-widest uppercase">
+            <h2 className="text-sm font-semibold text-emerald-600 tracking-widest uppercase">
               Success Stories
             </h2>
             <p className="mt-2 text-4xl font-bold tracking-tight text-slate-900">
@@ -680,7 +680,7 @@ const Home = () => {
             {/* We'll render testimonials here. If there's an issue with data, we'll use placeholders */}
             {Array.from({ length: 3 }).map((_, i) => (
               <div key={i} className="bg-white rounded-xl shadow-md overflow-hidden border border-slate-100 p-8 relative">
-                <div className="text-indigo-500 mb-4">
+                <div className="text-emerald-500 mb-4">
                   <svg width="45" height="36" className="fill-current opacity-20" viewBox="0 0 45 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M13.4 36C8.86667 36 5.2 34.4 2.4 31.2C0.8 28.8 0 25.8667 0 22.4C0 18.4 1.06667 14.6667 3.2 11.2C5.33333 7.73333 8.4 4.53333 12.4 1.6L20 8.8C18 10.1333 16.2667 11.8667 14.8 14C13.3333 16.1333 12.6 18 12.6 19.6C12.6 19.8667 12.7333 20.1333 13 20.4C13.2667 20.6667 13.6 20.8 14 20.8C14.5333 20.8 15.3333 20.4 16.4 19.6C17.4667 18.8 18.2 18.4 18.6 18.4C20.2 18.4 21.5333 19 22.6 20.2C23.6667 21.4 24.2 22.8 24.2 24.4C24.2 27.2 23.1333 29.6 21 31.6C18.8667 34.5333 16.3333 36 13.4 36ZM34.6 36C30.0667 36 26.4 34.4 23.6 31.2C22 28.8 21.2 25.8667 21.2 22.4C21.2 18.4 22.2667 14.6667 24.4 11.2C26.5333 7.73333 29.6 4.53333 33.6 1.6L41.2 8.8C39.2 10.1333 37.4667 11.8667 36 14C34.5333 16.1333 33.8 18 33.8 19.6C33.8 19.8667 33.9333 20.1333 34.2 20.4C34.4667 20.6667 34.8 20.8 35.2 20.8C35.7333 20.8 36.5333 20.4 37.6 19.6C38.6667 18.8 39.4 18.4 39.8 18.4C41.4 18.4 42.7333 19 43.8 20.2C44.8667 21.4 45.4 22.8 45.4 24.4C45.4 27.2 44.3333 29.6 42.2 31.6C40.0667 34.5333 37.5333 36 34.6 36Z" />
                   </svg>
@@ -720,7 +720,7 @@ const Home = () => {
       <section className="py-24 bg-gradient-to-b from-slate-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-sm font-semibold text-indigo-600 tracking-widest uppercase">
+            <h2 className="text-sm font-semibold text-emerald-600 tracking-widest uppercase">
               Membership Plans
             </h2>
             <p className="mt-2 text-4xl font-bold tracking-tight text-slate-900">
@@ -780,18 +780,18 @@ const Home = () => {
                 buttonVariant: "outline"
               }
             ].map((tier, i) => (
-              <div key={i} className={`rounded-xl ${tier.highlighted ? 'ring-2 ring-indigo-600 shadow-xl' : 'border border-slate-200 shadow-md'} bg-white overflow-hidden transition-all duration-300 hover:shadow-xl`}>
-                <div className={`p-8 ${tier.highlighted ? 'bg-indigo-600' : 'bg-white'}`}>
+              <div key={i} className={`rounded-xl ${tier.highlighted ? 'ring-2 ring-emerald-600 shadow-xl' : 'border border-slate-200 shadow-md'} bg-white overflow-hidden transition-all duration-300 hover:shadow-xl`}>
+                <div className={`p-8 ${tier.highlighted ? 'bg-emerald-600' : 'bg-white'}`}>
                   <h3 className={`text-xl font-semibold ${tier.highlighted ? 'text-white' : 'text-slate-900'}`}>{tier.name}</h3>
                   <p className={`mt-4 text-3xl font-bold ${tier.highlighted ? 'text-white' : 'text-slate-900'}`}>{tier.price}</p>
-                  <p className={`mt-2 text-sm ${tier.highlighted ? 'text-indigo-100' : 'text-slate-500'}`}>{tier.description}</p>
+                  <p className={`mt-2 text-sm ${tier.highlighted ? 'text-emerald-100' : 'text-slate-500'}`}>{tier.description}</p>
                 </div>
                 <div className="p-8">
                   <ul className="space-y-4">
                     {tier.features.map((feature, j) => (
                       <li key={j} className="flex items-start">
-                        <div className={`rounded-full ${tier.highlighted ? 'bg-indigo-100' : 'bg-slate-100'} p-1 mr-3 mt-0.5`}>
-                          <Check className={`h-4 w-4 ${tier.highlighted ? 'text-indigo-600' : 'text-slate-700'}`} />
+                        <div className={`rounded-full ${tier.highlighted ? 'bg-emerald-100' : 'bg-slate-100'} p-1 mr-3 mt-0.5`}>
+                          <Check className={`h-4 w-4 ${tier.highlighted ? 'text-emerald-600' : 'text-slate-700'}`} />
                         </div>
                         <span className="text-slate-700">{feature}</span>
                       </li>
@@ -799,7 +799,7 @@ const Home = () => {
                   </ul>
                   <div className="mt-8">
                     <Button 
-                      className={`w-full ${tier.highlighted ? 'bg-indigo-600 hover:bg-indigo-700 text-white' : 'border-slate-300 text-slate-700 hover:bg-slate-50'}`}
+                      className={`w-full ${tier.highlighted ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : 'border-slate-300 text-slate-700 hover:bg-slate-50'}`}
                       variant={tier.buttonVariant as any}
                       onClick={() => tier.name === "Basic" ? setLocation("/auth") : document.getElementById("waitlist")?.scrollIntoView({ behavior: "smooth" })}
                     >
@@ -808,7 +808,7 @@ const Home = () => {
                   </div>
                 </div>
                 {tier.highlighted && (
-                  <div className="bg-indigo-600 py-2 text-center text-sm text-white">
+                  <div className="bg-emerald-600 py-2 text-center text-sm text-white">
                     Most Popular Choice
                   </div>
                 )}
@@ -819,21 +819,21 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 text-white relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-indigo-400 blur-3xl"></div>
-          <div className="absolute bottom-40 right-20 w-80 h-80 rounded-full bg-indigo-300 blur-3xl"></div>
+          <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-emerald-400 blur-3xl"></div>
+          <div className="absolute bottom-40 right-20 w-80 h-80 rounded-full bg-teal-300 blur-3xl"></div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Transform Your Career?</h2>
-            <p className="text-lg md:text-xl text-indigo-100 mb-8">
+            <p className="text-lg md:text-xl text-emerald-100 mb-8">
               Join thousands of professionals who are advancing their careers with D-Code Labs certification courses.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 size="lg" 
-                className="bg-white text-indigo-700 hover:bg-indigo-50 px-8 rounded-full"
+                className="bg-white text-emerald-700 hover:bg-emerald-50 px-8 rounded-full"
                 onClick={() => setLocation("/auth")}
               >
                 Get Started Today
@@ -841,7 +841,7 @@ const Home = () => {
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="border-white text-white hover:bg-indigo-500 px-8 rounded-full"
+                className="border-white text-white hover:bg-emerald-500 px-8 rounded-full"
                 onClick={() => document.getElementById("waitlist")?.scrollIntoView({ behavior: "smooth" })}
               >
                 Join Our Waitlist
@@ -855,7 +855,7 @@ const Home = () => {
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-sm font-semibold text-indigo-600 tracking-widest uppercase">
+            <h2 className="text-sm font-semibold text-emerald-600 tracking-widest uppercase">
               Resources
             </h2>
             <p className="mt-2 text-4xl font-bold tracking-tight text-slate-900">
@@ -871,7 +871,7 @@ const Home = () => {
               {
                 title: "Learning Guides",
                 description: "Step-by-step tutorials and guides to help you master new skills efficiently.",
-                icon: <BookOpen className="h-6 w-6 text-indigo-600" />,
+                icon: <BookOpen className="h-6 w-6 text-emerald-600" />,
                 link: "#"
               },
               {
@@ -889,14 +889,14 @@ const Home = () => {
             ].map((resource, i) => (
               <div key={i} className="bg-white rounded-xl shadow-md overflow-hidden border border-slate-100 transition-all duration-300 hover:shadow-xl hover:scale-[1.02] group">
                 <div className="p-6">
-                  <div className="rounded-full bg-slate-100 p-3 w-14 h-14 group-hover:bg-indigo-50 transition-colors duration-300 mb-4 flex items-center justify-center">
+                  <div className="rounded-full bg-slate-100 p-3 w-14 h-14 group-hover:bg-emerald-50 transition-colors duration-300 mb-4 flex items-center justify-center">
                     {resource.icon}
                   </div>
-                  <h3 className="text-xl font-semibold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors duration-300">{resource.title}</h3>
+                  <h3 className="text-xl font-semibold text-slate-900 mb-2 group-hover:text-emerald-600 transition-colors duration-300">{resource.title}</h3>
                   <p className="text-slate-600 mb-4">{resource.description}</p>
                   <Button 
                     variant="link" 
-                    className="p-0 h-auto text-indigo-600 hover:text-indigo-800 font-medium"
+                    className="p-0 h-auto text-emerald-600 hover:text-emerald-800 font-medium"
                     onClick={() => toast({ 
                       title: "Coming Soon", 
                       description: "This feature will be available in the next update!" 
@@ -915,7 +915,7 @@ const Home = () => {
       <section className="py-24 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-sm font-semibold text-indigo-600 tracking-widest uppercase">
+            <h2 className="text-sm font-semibold text-emerald-600 tracking-widest uppercase">
               FAQ
             </h2>
             <p className="mt-2 text-4xl font-bold tracking-tight text-slate-900">
@@ -954,7 +954,7 @@ const Home = () => {
                   <summary className="flex justify-between items-center cursor-pointer text-lg font-medium text-slate-900">
                     <span>{faq.question}</span>
                     <span className="transition-transform duration-300 group-open:rotate-180">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-indigo-600">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-emerald-600">
                         <polyline points="6 9 12 15 18 9"></polyline>
                       </svg>
                     </span>
@@ -974,7 +974,7 @@ const Home = () => {
         <section className="py-24 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto text-center mb-12">
-              <h2 className="text-sm font-semibold text-indigo-600 tracking-widest uppercase">
+              <h2 className="text-sm font-semibold text-emerald-600 tracking-widest uppercase">
                 Stay Updated
               </h2>
               <p className="mt-2 text-4xl font-bold tracking-tight text-slate-900">
@@ -994,7 +994,7 @@ const Home = () => {
                       {...form.register("name")}
                       id="name"
                       placeholder="John Doe"
-                      className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     />
                     {form.formState.errors.name && (
                       <p className="text-sm text-red-500">{form.formState.errors.name.message}</p>
@@ -1008,7 +1008,7 @@ const Home = () => {
                       id="email"
                       type="email"
                       placeholder="john@example.com"
-                      className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     />
                     {form.formState.errors.email && (
                       <p className="text-sm text-red-500">{form.formState.errors.email.message}</p>
@@ -1020,7 +1020,7 @@ const Home = () => {
                     <select
                       {...form.register("interest")}
                       id="interest"
-                      className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
                       <option value="Web Development">Web Development</option>
                       <option value="Data Science">Data Science</option>
@@ -1035,7 +1035,7 @@ const Home = () => {
                   
                   <Button 
                     type="submit" 
-                    className="w-full bg-indigo-600 hover:bg-indigo-700 rounded-md py-2.5"
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 rounded-md py-2.5"
                     disabled={waitlistMutation.isPending}
                   >
                     {waitlistMutation.isPending ? "Submitting..." : "Join Waitlist"}
