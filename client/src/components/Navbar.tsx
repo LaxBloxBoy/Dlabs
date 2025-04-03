@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { 
   NavigationMenu,
@@ -11,13 +12,15 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { ChevronDown, User, LogIn } from "lucide-react";
+import { ChevronDown, User, LogIn, LogOut } from "lucide-react";
 import { Category } from "@shared/schema";
+import ProfileDropdown from "./ProfileDropdown";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [location] = useLocation();
+  const { user, logoutMutation } = useAuth();
 
   // Fetch categories for the mega menu
   const { data: categories } = useQuery<Category[]>({
@@ -171,18 +174,24 @@ const Navbar = () => {
             </div>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-3">
-            <Link href="/login">
-              <Button variant="outline" size="sm" className="flex items-center">
-                <LogIn className="mr-2 h-4 w-4" />
-                Login
-              </Button>
-            </Link>
-            <Link href="/signup">
-              <Button variant="default" size="sm" className="flex items-center">
-                <User className="mr-2 h-4 w-4" />
-                Sign Up
-              </Button>
-            </Link>
+            {user ? (
+              <ProfileDropdown />
+            ) : (
+              <>
+                <Link href="/login">
+                  <Button variant="outline" size="sm" className="flex items-center">
+                    <LogIn className="mr-2 h-4 w-4" />
+                    Login
+                  </Button>
+                </Link>
+                <Link href="/signup">
+                  <Button variant="default" size="sm" className="flex items-center">
+                    <User className="mr-2 h-4 w-4" />
+                    Sign Up
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
           <div className="-mr-2 flex items-center sm:hidden">
             <button 
@@ -260,20 +269,43 @@ const Navbar = () => {
           >
             About
           </Link>
-          <div className="mt-4 px-4 space-y-2">
-            <Link href="/login">
-              <Button variant="outline" className="w-full flex items-center justify-center">
-                <LogIn className="mr-2 h-4 w-4" />
-                Login
+          {user ? (
+            <div className="mt-4 px-4 space-y-2">
+              <Link href="/profile" onClick={closeMenu}>
+                <Button variant="outline" className="w-full flex items-center justify-center">
+                  <User className="mr-2 h-4 w-4" />
+                  My Profile
+                </Button>
+              </Link>
+              <Button 
+                variant="default" 
+                className="w-full flex items-center justify-center"
+                onClick={() => {
+                  closeMenu();
+                  logoutMutation.mutate();
+                }}
+                disabled={logoutMutation.isPending}
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                {logoutMutation.isPending ? "Logging out..." : "Log Out"}
               </Button>
-            </Link>
-            <Link href="/signup">
-              <Button variant="default" className="w-full flex items-center justify-center">
-                <User className="mr-2 h-4 w-4" />
-                Sign Up
-              </Button>
-            </Link>
-          </div>
+            </div>
+          ) : (
+            <div className="mt-4 px-4 space-y-2">
+              <Link href="/login" onClick={closeMenu}>
+                <Button variant="outline" className="w-full flex items-center justify-center">
+                  <LogIn className="mr-2 h-4 w-4" />
+                  Login
+                </Button>
+              </Link>
+              <Link href="/signup" onClick={closeMenu}>
+                <Button variant="default" className="w-full flex items-center justify-center">
+                  <User className="mr-2 h-4 w-4" />
+                  Sign Up
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </nav>

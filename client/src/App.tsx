@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import Home from "@/pages/Home";
 import CourseDetail from "@/pages/CourseDetail";
 import AuthPage from "@/pages/auth-page";
+import ProfilePage from "@/pages/profile-page";
 import NotFound from "@/pages/not-found";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/lib/protected-route";
@@ -23,7 +24,8 @@ function Router() {
       <Route path="/signup">
         <Redirect to="/auth/signup" />
       </Route>
-      {/* Protected routes example */}
+      {/* Protected routes */}
+      <Route path="/profile" component={ProfilePage} />
       <ProtectedRoute path="/dashboard">
         <div className="container mx-auto py-10">
           <h1 className="text-2xl font-bold">Dashboard</h1>

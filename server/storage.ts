@@ -198,7 +198,8 @@ export class PostgresStorage implements IStorage {
         { name: "Marketing", icon: "bullhorn", courseCount: 10 },
         { name: "IT & Software", icon: "cogs", courseCount: 22 },
         { name: "Languages", icon: "language", courseCount: 8 },
-        { name: "Personal Development", icon: "lightbulb", courseCount: 14 }
+        { name: "Personal Development", icon: "lightbulb", courseCount: 14 },
+        { name: "ISO Standards", icon: "shield-check", courseCount: 22 }
       ];
 
       for (const category of categoriesData) {
@@ -221,6 +222,11 @@ export class PostgresStorage implements IStorage {
           name: "Michael Chen",
           avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
           bio: "UX/UI Designer with experience at top tech companies"
+        },
+        {
+          name: "Dr. Amanda Miller",
+          avatar: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+          bio: "ISO Standards Expert with 15+ years of consulting experience in Quality Management Systems"
         }
       ];
 
@@ -307,6 +313,128 @@ export class PostgresStorage implements IStorage {
           isPopular: true,
           isNew: false,
           rating: 4.8
+        },
+        // ISO Quality Management (ISO 9001) Courses
+        {
+          title: "ISO 9001:2015 - Quality Management Systems (QMS) Basics",
+          description: "Learn the fundamentals of ISO 9001:2015 Quality Management Systems and how to implement them in your organization.",
+          image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=600&q=80",
+          price: 349,
+          difficulty: "Beginner",
+          duration: "4 weeks",
+          categoryId: 9, // ISO Standards
+          instructorId: 4, // Dr. Amanda Miller
+          isPopular: true,
+          isNew: true,
+          rating: 4.8
+        },
+        {
+          title: "Internal Auditor Training for ISO 9001",
+          description: "Comprehensive training for conducting internal audits of Quality Management Systems based on ISO 9001:2015.",
+          image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=600&q=80",
+          price: 399,
+          difficulty: "Intermediate",
+          duration: "3 weeks",
+          categoryId: 9, // ISO Standards
+          instructorId: 4, // Dr. Amanda Miller
+          isPopular: false,
+          isNew: false,
+          rating: 4.7
+        },
+        {
+          title: "Implementing ISO 9001 in Your Organization",
+          description: "Step-by-step guidance on implementing ISO 9001:2015 quality management principles in your business operations.",
+          image: "https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=600&q=80",
+          price: 499,
+          difficulty: "Advanced",
+          duration: "6 weeks",
+          categoryId: 9, // ISO Standards
+          instructorId: 4, // Dr. Amanda Miller
+          isPopular: false,
+          isNew: false,
+          rating: 4.9
+        },
+        {
+          title: "ISO 9001 for Real Estate and Construction Firms",
+          description: "Specialized course on applying ISO 9001 quality management standards in real estate and construction industries.",
+          image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=600&q=80",
+          price: 449,
+          difficulty: "Intermediate",
+          duration: "4 weeks",
+          categoryId: 9, // ISO Standards
+          instructorId: 4, // Dr. Amanda Miller
+          isPopular: true,
+          isNew: false,
+          rating: 4.6
+        },
+        // Environmental Management (ISO 14001)
+        {
+          title: "ISO 14001:2015 - Environmental Management Systems (EMS)",
+          description: "Master the principles and requirements of ISO 14001:2015 for effective environmental management.",
+          image: "https://images.unsplash.com/photo-1483354483454-4cd359948304?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=600&q=80",
+          price: 379,
+          difficulty: "Beginner",
+          duration: "5 weeks",
+          categoryId: 9, // ISO Standards
+          instructorId: 4, // Dr. Amanda Miller
+          isPopular: false,
+          isNew: true,
+          rating: 4.8
+        },
+        {
+          title: "Sustainability and ISO 14001 Compliance",
+          description: "Learn how to integrate sustainability initiatives with ISO 14001 environmental management standards.",
+          image: "https://images.unsplash.com/photo-1470115636492-6d2b56f9146d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=600&q=80",
+          price: 399,
+          difficulty: "Intermediate",
+          duration: "4 weeks",
+          categoryId: 9, // ISO Standards
+          instructorId: 4, // Dr. Amanda Miller
+          isPopular: true,
+          isNew: false,
+          rating: 4.7
+        },
+        // Occupational Health & Safety (ISO 45001)
+        {
+          title: "ISO 45001:2018 - Health and Safety Management Systems",
+          description: "Comprehensive guide to implementing occupational health and safety management systems per ISO 45001.",
+          image: "https://images.unsplash.com/photo-1581094794329-c8112a89f12e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=600&q=80",
+          price: 429,
+          difficulty: "Intermediate",
+          duration: "6 weeks",
+          categoryId: 9, // ISO Standards
+          instructorId: 4, // Dr. Amanda Miller
+          isPopular: false,
+          isNew: true,
+          rating: 4.9
+        },
+        // Information Security (ISO/IEC 27001)
+        {
+          title: "ISO 27001:2022 - Information Security Management Systems",
+          description: "Learn how to protect your organization's information assets with ISO 27001-compliant security systems.",
+          image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=600&q=80",
+          price: 499,
+          difficulty: "Advanced",
+          duration: "8 weeks",
+          categoryId: 9, // ISO Standards
+          instructorId: 4, // Dr. Amanda Miller
+          isPopular: true,
+          isNew: true,
+          rating: 4.8
+        },
+        // Risk Management (ISO 31000)
+        {
+          title: "ISO 31000:2018 - Principles of Risk Management",
+          description: "Master the fundamentals of risk management using the internationally recognized ISO 31000 framework.",
+          image: "https://images.unsplash.com/photo-1612099197029-2f6a035fe6f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=600&q=80",
+          price: 399,
+          difficulty: "Intermediate",
+          duration: "5 weeks",
+          categoryId: 9, // ISO Standards
+          instructorId: 4, // Dr. Amanda Miller
+          isPopular: false,
+          isNew: false,
+          rating: 4.7
         }
       ];
 
