@@ -8,6 +8,8 @@ export const users = pgTable("users", {
   username: text("username").notNull().unique(),
   email: text("email").notNull(),
   password: text("password").notNull(),
+  subscriptionTier: text("subscription_tier").default("free"),
+  hasUnlimitedAccess: boolean("has_unlimited_access").default(false),
 });
 
 export const insertUserSchema = createInsertSchema(users).pick({
@@ -146,3 +148,23 @@ export const insertTestimonialSchema = createInsertSchema(testimonials).pick({
 
 export type InsertTestimonial = z.infer<typeof insertTestimonialSchema>;
 export type Testimonial = typeof testimonials.$inferSelect;
+
+// Enrollments schema
+export const enrollments = pgTable("enrollments", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  courseId: integer("course_id").notNull(),
+  enrolledAt: timestamp("enrolled_at").defaultNow(),
+  status: text("status").notNull().default("active"), // active, completed, cancelled
+  progress: integer("progress").notNull().default(0), // 0-100 percentage
+});
+
+export const insertEnrollmentSchema = createInsertSchema(enrollments).pick({
+  userId: true,
+  courseId: true,
+  status: true,
+  progress: true,
+});
+
+export type InsertEnrollment = z.infer<typeof insertEnrollmentSchema>;
+export type Enrollment = typeof enrollments.$inferSelect;

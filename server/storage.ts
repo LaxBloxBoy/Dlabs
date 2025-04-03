@@ -1,5 +1,5 @@
 import session from "express-session";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import connectPgSimple from "connect-pg-simple";
 import { db, pool } from "./db";
 
@@ -24,7 +24,10 @@ import {
   type InsertContactSubmission,
   testimonials,
   type Testimonial,
-  type InsertTestimonial
+  type InsertTestimonial,
+  enrollments,
+  type Enrollment,
+  type InsertEnrollment
 } from "@shared/schema";
 
 export interface IStorage {
@@ -35,6 +38,7 @@ export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  updateUserSubscription(userId: number, subscriptionTier: string, hasUnlimitedAccess: boolean): Promise<User>;
 
   // Category methods
   getAllCategories(): Promise<Category[]>;
@@ -51,6 +55,13 @@ export interface IStorage {
   getCourseById(id: number): Promise<Course | undefined>;
   getCoursesByCategory(categoryId: number): Promise<Course[]>;
   createCourse(course: InsertCourse): Promise<Course>;
+
+  // Enrollment methods
+  getUserEnrollments(userId: number): Promise<Enrollment[]>;
+  getCourseEnrollments(courseId: number): Promise<Enrollment[]>;
+  enrollUserInCourse(enrollment: InsertEnrollment): Promise<Enrollment>;
+  updateEnrollmentProgress(enrollmentId: number, progress: number): Promise<Enrollment>;
+  isUserEnrolledInCourse(userId: number, courseId: number): Promise<boolean>;
 
   // Waitlist methods
   addToWaitlist(entry: InsertWaitlist): Promise<Waitlist>;
@@ -95,6 +106,15 @@ export class PostgresStorage implements IStorage {
 
   async createUser(user: InsertUser): Promise<User> {
     const result = await db.insert(users).values(user).returning();
+    return result[0];
+  }
+  
+  async updateUserSubscription(userId: number, subscriptionTier: string, hasUnlimitedAccess: boolean): Promise<User> {
+    const result = await db
+      .update(users)
+      .set({ subscriptionTier, hasUnlimitedAccess })
+      .where(eq(users.id, userId))
+      .returning();
     return result[0];
   }
 
@@ -145,6 +165,41 @@ export class PostgresStorage implements IStorage {
   async createCourse(course: InsertCourse): Promise<Course> {
     const result = await db.insert(courses).values(course).returning();
     return result[0];
+  }
+
+  // Enrollment methods
+  async getUserEnrollments(userId: number): Promise<Enrollment[]> {
+    return await db.select().from(enrollments).where(eq(enrollments.userId, userId));
+  }
+
+  async getCourseEnrollments(courseId: number): Promise<Enrollment[]> {
+    return await db.select().from(enrollments).where(eq(enrollments.courseId, courseId));
+  }
+
+  async enrollUserInCourse(enrollment: InsertEnrollment): Promise<Enrollment> {
+    const result = await db.insert(enrollments).values(enrollment).returning();
+    return result[0];
+  }
+
+  async updateEnrollmentProgress(enrollmentId: number, progress: number): Promise<Enrollment> {
+    const result = await db
+      .update(enrollments)
+      .set({ progress })
+      .where(eq(enrollments.id, enrollmentId))
+      .returning();
+    return result[0];
+  }
+
+  async isUserEnrolledInCourse(userId: number, courseId: number): Promise<boolean> {
+    const result = await db
+      .select()
+      .from(enrollments)
+      .where(and(
+        eq(enrollments.userId, userId),
+        eq(enrollments.courseId, courseId)
+      ))
+      .limit(1);
+    return result.length > 0;
   }
 
   // Waitlist methods

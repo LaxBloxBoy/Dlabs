@@ -1,12 +1,13 @@
-import { useParams } from "wouter";
-import { useQuery } from "@tanstack/react-query";
+import { useParams, useLocation } from "wouter";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { useMutation } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useAuth } from "@/hooks/use-auth";
+import { Course } from "@shared/schema";
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -17,9 +18,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { BarChart2, Calendar, Clock, Star, CheckCircle, ArrowLeft } from "lucide-react";
+import { 
+  BarChart2, Calendar, Clock, Star, CheckCircle, ArrowLeft, 
+  Shield, CreditCard, ShoppingCart, Lock, AlertCircle
+} from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "wouter";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 // Form schema
 const waitlistFormSchema = z.object({
@@ -33,10 +38,79 @@ const CourseDetail = () => {
   const { id } = useParams<{ id: string }>();
   const courseId = parseInt(id);
   const { toast } = useToast();
+  const { user } = useAuth();
+  const [, navigate] = useLocation();
   
-  const { data: course, isLoading, error } = useQuery({
+  // Query for fetching course details
+  const { data: course, isLoading: courseLoading, error: courseError } = useQuery<(Course & {
+    instructor?: { id: number; name: string; avatar: string; bio: string }; 
+    category?: { id: number; name: string };
+  })>({
     queryKey: [`/api/courses/${courseId}`],
   });
+  
+  // Query for checking if user is already enrolled
+  const { data: enrollmentStatus, isLoading: enrollmentLoading } = useQuery<any[]>({
+    queryKey: ['/api/enrollments'],
+    enabled: !!user, // Only run this query if the user is logged in
+  });
+  
+  // Check if user is already enrolled in this course
+  const isEnrolled = enrollmentStatus ? enrollmentStatus.some((enrollment: any) => 
+    enrollment.courseId === courseId
+  ) : false;
+  
+  // Enrollment mutation
+  const enrollMutation = useMutation({
+    mutationFn: async () => {
+      const response = await apiRequest("POST", "/api/enrollments", { courseId });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to enroll in course");
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success!",
+        description: "You've successfully enrolled in this course.",
+      });
+      // Invalidate enrollment queries
+      queryClient.invalidateQueries({ queryKey: ['/api/enrollments'] });
+    },
+    onError: (error: Error) => {
+      // Check for payment required error (402)
+      if (error.message.includes("Payment required")) {
+        toast({
+          title: "Subscription Required",
+          description: "You need to upgrade to a premium subscription to access this course.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: error.message || "Failed to enroll in course. Please try again.",
+          variant: "destructive",
+        });
+      }
+    },
+  });
+  
+  const handleEnroll = () => {
+    if (!user) {
+      // Redirect to login page if user is not logged in
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to enroll in this course.",
+      });
+      navigate("/auth");
+      return;
+    }
+    
+    enrollMutation.mutate();
+  };
+  
+  const isLoading = courseLoading || enrollmentLoading;
 
   const form = useForm<WaitlistFormValues>({
     resolver: zodResolver(waitlistFormSchema),
@@ -98,7 +172,7 @@ const CourseDetail = () => {
     );
   }
 
-  if (error || !course) {
+  if (courseError || !course) {
     return (
       <div className="min-h-screen bg-slate-50">
         <Navbar />
@@ -182,7 +256,7 @@ const CourseDetail = () => {
               )}
               <div className="flex items-center">
                 <Star className="h-4 w-4 text-yellow-400 fill-yellow-400 mr-1" />
-                <span className="text-sm font-medium text-slate-700">{course.rating.toFixed(1)} rating</span>
+                <span className="text-sm font-medium text-slate-700">{course.rating ? course.rating.toFixed(1) : "0.0"} rating</span>
               </div>
             </div>
             
@@ -269,53 +343,105 @@ const CourseDetail = () => {
             <Card className="sticky top-24">
               <CardHeader>
                 <CardTitle className="text-2xl font-bold">${course.price}</CardTitle>
-                <CardDescription>Join the waitlist for this course</CardDescription>
+                <CardDescription>
+                  {isEnrolled ? "You're enrolled in this course" : "Enroll in this course"}
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <p className="text-sm text-slate-600">
-                    This course is coming soon. Join the waitlist to be notified when enrollment opens.
-                  </p>
-                  
-                  <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                      <FormField
-                        control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Full Name</FormLabel>
-                            <FormControl>
-                              <Input placeholder="John Doe" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                  {isEnrolled ? (
+                    <>
+                      <Alert className="bg-green-50 border-green-200">
+                        <CheckCircle className="h-4 w-4 text-green-600" />
+                        <AlertTitle className="text-green-800 font-medium">Already Enrolled</AlertTitle>
+                        <AlertDescription className="text-green-700 text-sm">
+                          You're already enrolled in this course. Continue your learning journey!
+                        </AlertDescription>
+                      </Alert>
                       
-                      <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                              <Input type="email" placeholder="email@example.com" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      <Link href="/profile">
+                        <Button className="w-full">
+                          Go to Your Dashboard
+                        </Button>
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4 text-green-600" />
+                          <span className="text-sm text-slate-600">Full lifetime access</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4 text-green-600" />
+                          <span className="text-sm text-slate-600">Access on mobile and desktop</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4 text-green-600" />
+                          <span className="text-sm text-slate-600">Certificate of completion</span>
+                        </div>
+                      </div>
                       
-                      <Button 
-                        type="submit" 
-                        className="w-full"
-                        disabled={waitlistMutation.isPending}
-                      >
-                        {waitlistMutation.isPending ? "Processing..." : "Join Waitlist"}
-                      </Button>
-                    </form>
-                  </Form>
+                      {user ? (
+                        <>
+                          {user.hasUnlimitedAccess === true ? (
+                            <Alert className="bg-indigo-50 border-indigo-200 mb-4">
+                              <Shield className="h-4 w-4 text-indigo-600" />
+                              <AlertTitle className="text-indigo-800 font-medium">Premium Access</AlertTitle>
+                              <AlertDescription className="text-indigo-700 text-sm">
+                                As a premium member, you have unlimited access to all courses.
+                              </AlertDescription>
+                            </Alert>
+                          ) : course.price > 0 ? (
+                            <Alert className="bg-amber-50 border-amber-200 mb-4">
+                              <CreditCard className="h-4 w-4 text-amber-600" />
+                              <AlertTitle className="text-amber-800 font-medium">Course Purchase</AlertTitle>
+                              <AlertDescription className="text-amber-700 text-sm">
+                                You can purchase this course or upgrade to a premium membership for unlimited access.
+                              </AlertDescription>
+                            </Alert>
+                          ) : null}
+                          
+                          <Button 
+                            onClick={handleEnroll}
+                            className="w-full"
+                            disabled={enrollMutation.isPending}
+                          >
+                            {enrollMutation.isPending ? (
+                              "Processing..."
+                            ) : (
+                              <>
+                                {course.price === 0 ? (
+                                  "Enroll Now - Free"
+                                ) : user.hasUnlimitedAccess === true ? (
+                                  "Enroll Now - Premium Access"
+                                ) : (
+                                  <>Enroll Now - ${course.price}</>
+                                )}
+                              </>
+                            )}
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <Alert className="bg-blue-50 border-blue-200 mb-4">
+                            <AlertCircle className="h-4 w-4 text-blue-600" />
+                            <AlertTitle className="text-blue-800 font-medium">Login Required</AlertTitle>
+                            <AlertDescription className="text-blue-700 text-sm">
+                              Please login to enroll in this course.
+                            </AlertDescription>
+                          </Alert>
+                          
+                          <Link href="/auth">
+                            <Button className="w-full" variant="default">
+                              <Lock className="h-4 w-4 mr-2" />
+                              Login to Enroll
+                            </Button>
+                          </Link>
+                        </>
+                      )}
+                    </>
+                  )}
                 </div>
               </CardContent>
               <CardFooter className="flex flex-col space-y-4 items-center justify-center border-t px-6 py-4">

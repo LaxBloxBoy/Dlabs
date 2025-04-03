@@ -14,6 +14,8 @@ type SafeUser = {
   id: number;
   username: string;
   email: string;
+  subscriptionTier?: string;
+  hasUnlimitedAccess?: boolean;
 };
 
 type AuthContextType = {
